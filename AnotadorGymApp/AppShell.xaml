@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="AnotadorGymApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:AnotadorGymApp"
+    xmlns:Rutinas="clr-namespace:AnotadorGymApp.RutinasPage"
+    xmlns:Metricas="clr-namespace:AnotadorGymApp.MetricasPageViews"
+    Shell.FlyoutBehavior="Disabled"
+    Title="AnotadorGymApp">
+
+
+    <TabBar>
+        <Tab Title="Ejercicios" Icon="ejercicios">
+            <ShellContent Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}"></ShellContent>
+        </Tab>
+        <Tab Title="Rutinas" Icon="rutinas">
+            <ShellContent Route="Rutinas" ContentTemplate="{DataTemplate Rutinas:PrincipalRutinasPage}"></ShellContent>
+        </Tab>
+        <Tab Title="Progreso" Icon="metricas">
+            <ShellContent Route="Progreso" ContentTemplate="{DataTemplate Metricas:MetricasPage}"></ShellContent>
+        </Tab>
+    </TabBar>
+</Shell>

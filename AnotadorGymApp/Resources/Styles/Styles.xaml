@@ -1,0 +1,382 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Style TargetType="BoxView">
+        <Setter Property="BackgroundColor" Value="{DynamicResource CardBackground}" />
+    </Style>
+
+    <Style TargetType="CheckBox">
+        <Setter Property="Color" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Color" Value="{DynamicResource DisabledTextColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Entry">
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="PlaceholderColor" Value="Gray" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+    </Style>
+
+    <Style TargetType="Border">
+        <Setter Property="StrokeThickness" Value="3"></Setter>
+        <Setter Property="BackgroundColor" Value="Transparent"></Setter>
+        <Setter Property="Stroke" Value="{DynamicResource AccentColorDark}"></Setter>
+        <Setter Property="StrokeShape" Value="10"></Setter>
+    </Style>
+
+    <Style x:Key="BorderWithOutShadowStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{DynamicResource GreenLightest}"/>
+        <Setter Property="Stroke" Value="{DynamicResource GreenLighter}"/>
+        <Setter Property="StrokeThickness" Value="2"/>
+        <Setter Property="Padding" Value="0"></Setter>
+        <Setter Property="Margin" Value="0"></Setter>
+    </Style>
+
+    <Style x:Key="BorderWithShadowStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{DynamicResource GreenLightest}"/>
+        <Setter Property="Stroke" Value="{DynamicResource GreenLighter}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="StrokeShape" Value="RoundRectangle 8"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow Radius="5" 
+                    Opacity="0.8" 
+                    Brush="{DynamicResource ShadowColor}" 
+                    Offset="0,0"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Border" x:Key="SelectedBorder">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"></VisualState>
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="Stroke" Value="{DynamicResource AccentColorDark}" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource AccentColorLight}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ImageButton">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource CardBackground}"></Setter>
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal"/>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Opacity" Value="0.5" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+
+    <Style TargetType="ListView">
+        <Setter Property="SeparatorColor" Value="{DynamicResource DividerColor}" />
+        <Setter Property="RefreshControlColor" Value="{DynamicResource PrimaryColor}" />
+    </Style>
+
+    <Style TargetType="Picker">
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        <Setter Property="TitleColor" Value="{DynamicResource SecondaryTextColor}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="FontFamily" Value="OpenSansRegular" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}" />
+                            <Setter Property="TitleColor" Value="{DynamicResource DisabledTextColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ProgressBar">
+        <Setter Property="ProgressColor" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="ProgressColor" Value="{DynamicResource DisabledTextColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="RadioButton">
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinimumHeightRequest" Value="44"/>
+        <Setter Property="MinimumWidthRequest" Value="44"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Shadow" x:Key="Shadow">
+        <Setter Property="Radius" Value="15" />
+        <Setter Property="Opacity" Value="0.5" />
+        <Setter Property="Brush" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="Offset" Value="10,10" />
+    </Style>
+
+    <Style TargetType="NavigationPage">
+        <Setter Property="BarBackgroundColor" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="BarTextColor" Value="{DynamicResource SecondaryTextColor}" />
+        <Setter Property="IconColor" Value="{DynamicResource SecondaryTextColor}" />
+    </Style>
+
+    <Style TargetType="Shell" ApplyToDerivedTypes="True">
+        <!-- COLORES PRINCIPALES -->
+        <Setter Property="Shell.BackgroundColor" Value="{DynamicResource GreenLightest}" />
+        <Setter Property="Shell.ForegroundColor" Value="{DynamicResource GreenDarkest}" />
+        <Setter Property="Shell.TitleColor" Value="{DynamicResource GreenDarkest}" />
+
+        <!-- ESTADOS -->
+        <Setter Property="Shell.DisabledColor" Value="{DynamicResource GreenPrimary}" />
+        <Setter Property="Shell.UnselectedColor" Value="{DynamicResource GreenDark}" />
+
+        <!-- NAVEGACIÓN -->
+        <Setter Property="Shell.NavBarHasShadow" Value="False" />
+
+        <!-- TAB BAR - MENÚ INFERIOR -->
+        <Setter Property="Shell.TabBarBackgroundColor" Value="{DynamicResource GreenLightest}" />
+        <Setter Property="Shell.TabBarForegroundColor" Value="{DynamicResource GreenMedium}" />
+        <Setter Property="Shell.TabBarTitleColor" Value="{DynamicResource GreenDark}" />
+        <Setter Property="Shell.TabBarUnselectedColor" Value="{DynamicResource GreenPrimary}" />
+
+        <!-- EFECTOS VISUALES -->
+        <Setter Property="Shell.NavBarHasShadow" Value="True" />
+    </Style>
+
+    <Style TargetType="HorizontalStackLayout" x:Key="HorizontalSelected">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource SecondaryColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="VerticalStackLayout" x:Key="Selected">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource SecondaryColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="VerticalStackLayout" x:Key="Default">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource AccentColorLight}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    
+    <Style TargetType="VerticalStackLayout">
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundColor}"></Setter>
+    </Style>
+
+    <Style TargetType="Grid">
+        <Setter Property="BackgroundColor" Value="Transparent"></Setter>
+        <Setter Property="Padding" Value="4"></Setter>
+    </Style>
+
+    <Style TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundColor}" />
+    </Style>
+
+    <Style TargetType="ScrollView">
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundColor}" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Headline">
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+    </Style>
+
+    
+    <Style TargetType="Label" x:Key="SubHeadline">
+        <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+    
+ 
+    
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="FontFamily" Value="LEMONMILK-Bold" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource GreenPrimary}" />
+        <Setter Property="TextColor" Value="White" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="12" />
+        <Setter Property="Padding" Value="24, 14" />
+        <Setter Property="FontFamily" Value="System" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="MinimumHeightRequest" Value="44" />
+        <Setter Property="MinimumWidthRequest" Value="44" />
+        <Setter Property="Shadow">
+            <Shadow Brush="{DynamicResource GreenDark}" 
+                Offset="0,4" 
+                Radius="8" 
+                Opacity="0.3"/>
+        </Setter>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource DisabledTextColor}" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource SecondaryColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DeleteButtonStyle" TargetType="Button">
+        <!-- TEXTO E ICONO -->
+        <Setter Property="Text" Value="🗑️" />
+        <!-- O puedes usar: ✕ ❌ 🗙 🗑️ -->
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="FontAttributes" Value="Bold" />
+
+        <!-- TAMAÑO Y FORMA -->
+        <Setter Property="WidthRequest" Value="30" />
+        <Setter Property="HeightRequest" Value="30" />
+        <Setter Property="CornerRadius" Value="15" />
+        <!-- Circular perfecto -->
+
+        <!-- COLORES ELEGANTES -->
+        <Setter Property="BackgroundColor" Value="{DynamicResource GreenLightest}" />
+        <Setter Property="TextColor" Value="{DynamicResource GreenDark}" />
+        <Setter Property="BorderColor" Value="{DynamicResource GreenLighter}" />
+        <Setter Property="BorderWidth" Value="1.2" />
+
+        <!-- ESPACIADO -->
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Margin" Value="5" />
+
+        <!-- EFECTO VISUAL -->
+        <Setter Property="Opacity" Value="0.8" />
+    </Style>
+
+    
+</ResourceDictionary>

@@ -1,0 +1,52 @@
+# Visual Studio
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# MAUI
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.apk
+*.ipa
+*.aab
+*.appx
+*.appxbundle
+*.msix
+*.msixbundle
+
+# Build results
+[Bb]uild/
+[Bb]uilds/
+
+# Files built by Visual Studio
+*.[Pp]ublish.xml
+*.publishproj
+
+# NuGet
+[Nn]uget/
+*.nupkg
+*.snupkg
+
+# MSTest test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Local History for Visual Studio
+.history/
+
+# Backup folder for Package Reference Convert tool
+Backup/
+
+# Others
+.DS_Store
+*.db
+*.sqlite
+*.db-shm
+*.db-wal
+
+# Database files - NO incluir datos de usuario
+AnotadorGymApp/Resources/Raw/WorkoutDays.json
+AnotadorGymApp/Resources/Raw/Ejercicios.json

@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- PALETA PRINCIPAL - VERDES AZULADOS ELEGANTES -->
+    <Color x:Key="PrimaryColor">#A5EBD4</Color>
+    <Color x:Key="SecondaryColor">#7AB09F</Color>
+
+    <!-- FONDOS -->
+    <Color x:Key="BackgroundColor">#FFFFFF</Color>
+    <Color x:Key="CardBackground">#D8F8ED</Color>
+    <Color x:Key="SurfaceColor">#F5F5F5</Color>
+
+    <!-- TEXTO -->
+    <Color x:Key="PrimaryTextColor">#39554c</Color>
+    <Color x:Key="SecondaryTextColor">#486A5F</Color>
+    <Color x:Key="DisabledTextColor">#7AB09F</Color>
+    
+    <!-- Verde principal para acciones -->
+    <Color x:Key="AccentColorLight">#7ab09f</Color>
+    <!-- Verde claro para hover/states -->
+    <Color x:Key="AccentColorDark">#39554C</Color>
+    <!-- Verde oscuro para pressed -->
+
+    <!-- ESTADOS -->
+    <Color x:Key="SuccessColor">#689788</Color>
+    <!-- Éxito: Verde principal -->
+    <Color x:Key="SuccessLightColor">#D8F8ED</Color>
+    <!-- Éxito claro: fondo suave -->
+    <Color x:Key="ErrorColor">#E57373</Color>
+    <!-- Error: Rojo pastel (contraste) -->
+    <Color x:Key="WarningColor">#FFB74D</Color>
+    <!-- Advertencia: Naranja suave -->
+    <Color x:Key="InfoColor">#4FC3F7</Color>
+    <!-- Info: Azul claro -->
+
+    <!-- BORDES Y DIVISORES -->
+    <Color x:Key="BorderColor">#7AB09F</Color>
+    <Color x:Key="DividerColor">#A5EBD4</Color>
+
+    <!-- SOMBRAS -->
+    <Color x:Key="ShadowColor">#486A5F</Color>
+
+    <!-- ESCALA COMPLETA DE VERDES -->
+    <Color x:Key="GreenLightest">#D8F8ED</Color>
+    <Color x:Key="GreenLighter">#A5EBD4</Color>
+    <Color x:Key="GreenPrimary">#7AB09F</Color>
+    <Color x:Key="GreenMedium">#689788</Color>
+    <Color x:Key="GreenDark">#486A5F</Color>
+    <Color x:Key="GreenDarker">#39554C</Color>
+    <Color x:Key="GreenDarkest">#15221E</Color>
+    <Color x:Key="GreenBlack">#091310</Color>
+</ResourceDictionary>
+
