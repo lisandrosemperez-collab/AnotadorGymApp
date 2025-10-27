@@ -181,7 +181,9 @@ namespace AnotadorGymApp.Data
                 return;
             }
 
-            await Task.WhenAll(AgregarMitades(primeraMitad, exercise), AgregarMitades(segundaMitad, exercise1), AgregarMitades(segundaMitad, exercise1));
+            await AgregarMitades(primeraMitad, exercise);
+            await AgregarMitades(segundaMitad, exercise1);
+            await AgregarMitades(terceraMitad, exercise2);            
         }
         private async Task AgregarMitades(List<WorkoutDay> mitad,Exercise exercise)
         {

@@ -278,35 +278,44 @@ public partial class AgregarRutinaPage : ContentPage, INotifyPropertyChanged
             RutinaId = DataService.GetIntIdAgregarRutinaPopUp();
 
         #region RutinaId
-        if (RutinaId != 0)
+        try
         {
-            // MODO EDICIÓN
-            var rutina = await DataService.ObtenerRutinaActualyUI(RutinaId);            
-            if (rutina != null)
-            {                                
-                RutinaActual = rutina;
+            if (RutinaId != 0)
+            {
+                // MODO EDICIÓN
+                var rutina = await DataService.ObtenerRutinaActualyUI(RutinaId);            
+                if (rutina != null)
+                {                                
+                    RutinaActual = rutina;
+                }
+                else
+                {
+                    await DisplayAlert("Error", "No se encontró la rutina", "OK");
+                    await Shell.Current.GoToAsync(".."); // vuelve para atrás
+                }
             }
             else
             {
-                await DisplayAlert("Error", "No se encontró la rutina", "OK");
-                await Shell.Current.GoToAsync(".."); // vuelve para atrás
+                // MODO NUEVA RUTINA
+                RutinaActual = new Rutinas
+                {
+                    Nombre = "Nueva Rutina",
+                    Activa = false,                
+                };
+
+                await DataService._database.Rutinas.AddAsync(RutinaActual);
+
+                // ANTES de SaveChanges, revisa qué hay en el ChangeTracker
+                var entries = DataService._database.ChangeTracker.Entries();
+                foreach (var entry in entries)
+                {
+                    Debug.WriteLine($"Entity: {entry.Entity.GetType().Name}, State: {entry.State}");
+                }
+
+                await DataService._database.SaveChangesAsync(); // necesario para que RutinaId se genere            
+                RutinaId = RutinaActual.RutinaId;
             }
-        }
-        else
-        {
-            // MODO NUEVA RUTINA
-            RutinaActual = new Rutinas
-            {
-                Nombre = "Nueva Rutina",
-                Activa = false,                
-            };
-
-            await DataService._database.Rutinas.AddAsync(RutinaActual);
-            await DataService._database.SaveChangesAsync(); // necesario para que RutinaId se genere            
-            RutinaId = RutinaActual.RutinaId;
-        }
-
-
+        }catch (Exception ex) {Debug.WriteLine($"{ex}"); }
 
         #endregion
 

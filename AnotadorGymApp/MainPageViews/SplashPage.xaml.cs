@@ -32,6 +32,7 @@ public partial class SplashPage : ContentPage
         
         try
         {
+            await _dataService._database.Database.MigrateAsync(); // Esto va si o si Sea o no El primer Arranque
             if (primerArranque)
             {
                 await CargarDatosInicialesAsync();                
@@ -135,7 +136,7 @@ public partial class SplashPage : ContentPage
         {
             await _dataService._database.Database.MigrateAsync();
 
-            if (!_dataService._database.Exercises.Any()) 
+            if (!_dataService._database.Exercises.Any() && Preferences.Get("PrimerArranque", true))
             { 
                 #region JsonABaseDeDatos
 

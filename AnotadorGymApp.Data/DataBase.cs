@@ -104,7 +104,7 @@ namespace AnotadorGymApp.Data
 
                 entity.HasOne(r => r.ExerciseLog)
                     .WithMany(r => r.SetsLog)
-                    .HasForeignKey(r => r.ExerciseLogId).OnDelete(deleteBehavior: DeleteBehavior.SetNull);  
+                    .HasForeignKey(r => r.ExerciseLogId).OnDelete(deleteBehavior: DeleteBehavior.Cascade);  
             });
             #endregion
 
