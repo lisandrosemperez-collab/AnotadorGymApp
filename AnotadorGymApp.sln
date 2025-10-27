@@ -12,11 +12,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnotadorGymApp.Data", "Anot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonDb", "JsonDb\JsonDb.csproj", "{C4EAA18A-DB17-4E61-93A9-3CA7F0FCD9B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModificarJson", "ModificarJson\ModificarJson.csproj", "{B963CDD4-5098-4C08-BB05-0B052484068C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E895DE1F-292C-498A-B625-2A75BDC8E3F5} = {E895DE1F-292C-498A-B625-2A75BDC8E3F5}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,9 +31,6 @@ Global
 		{C4EAA18A-DB17-4E61-93A9-3CA7F0FCD9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4EAA18A-DB17-4E61-93A9-3CA7F0FCD9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4EAA18A-DB17-4E61-93A9-3CA7F0FCD9B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B963CDD4-5098-4C08-BB05-0B052484068C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B963CDD4-5098-4C08-BB05-0B052484068C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B963CDD4-5098-4C08-BB05-0B052484068C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
