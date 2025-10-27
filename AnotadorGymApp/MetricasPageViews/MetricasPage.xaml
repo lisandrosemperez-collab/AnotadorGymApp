@@ -28,9 +28,8 @@
             </Border>
 
             <!-- FILTROS DE TIEMPO -->
-            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="10" IsClippedToBounds="False">
                 <StackLayout Orientation="Horizontal" Spacing="8">
-                    
                     <!-- TODOS -->
                     <Button Text="🕒 Todos"
                             FontSize="11"
@@ -96,29 +95,28 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Grid   RowDefinitions="Auto,Auto,*,*,*,*" 
-                                  ColumnDefinitions="Auto,*,Auto"
+                        <Grid   RowDefinitions="Auto,Auto,*,*,*,*"                                   
                                   RowSpacing="12" 
                                   ColumnSpacing="10" Margin="0" IsClippedToBounds="False">
 
                             <!-- HEADER - Nombre del Ejercicio -->                            
-                            <Border Grid.Row="0" Grid.ColumnSpan="3" 
-                                    BackgroundColor="{DynamicResource GreenLightest}"
+                            <Border Grid.Row="0" 
+                                    BackgroundColor="{DynamicResource SurfaceColor}"
                                     Padding="0,10"
                                     Stroke="{DynamicResource GreenPrimary}"
                                     StrokeThickness="1"
                                     StrokeShape="RoundRectangle 10">
 
-                                <Grid ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="0">
+                                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="0">
                                     <!-- NOMBRE Y GRUPO MUSCULAR -->
-                                    <StackLayout Grid.Column="1" 
+                                    <StackLayout Grid.Column="0" 
                                                  VerticalOptions="Center"
                                                  Margin="10,0,10,0">
                                         <Label Text="{Binding Ejercicio.Name}" 
                                                 FontAttributes="Bold" 
                                                 FontSize="16"
                                                 TextColor="{DynamicResource GreenDarker}"
-                                                MaxLines="2"
+                                                MaxLines="2"                                               
                                                 LineBreakMode="TailTruncation"/>
                                         <Label Text="{Binding Ejercicio.MuscleGroup}" 
                                         FontSize="12"
@@ -127,7 +125,7 @@
                                     </StackLayout>
 
                                     <!-- MÉTRICAS RÁPIDAS -->
-                                    <StackLayout Grid.Column="2" 
+                                    <StackLayout Grid.Column="1" 
                                          Orientation="Horizontal" 
                                          Spacing="15"
                                          VerticalOptions="Center">
@@ -201,7 +199,7 @@
                             </Grid>-->
 
                             <!-- GRÁFICOS -->
-                            <Border Grid.Row="2" Grid.ColumnSpan="3" Style="{DynamicResource BorderWithShadowStyle}">
+                            <Border Grid.Row="2" Style="{DynamicResource BorderWithShadowStyle}">
                                 <StackLayout BackgroundColor="{DynamicResource GreenLightest}">
                                     <Label Text="Peso Maximos x Dia(kg)" 
                                            FontSize="10" 
@@ -212,7 +210,7 @@
                                 </StackLayout>
                             </Border>
 
-                            <Border Grid.Row="3" Grid.ColumnSpan="3" Style="{DynamicResource BorderWithShadowStyle}">
+                            <Border Grid.Row="3" Style="{DynamicResource BorderWithShadowStyle}">
                                 <StackLayout>
                                     <Label Text="Volumen Maximo x Dia (kg)" 
                                    FontSize="10" 
@@ -224,7 +222,7 @@
                                 </StackLayout>
                             </Border>
 
-                            <Border Grid.Row="4" Grid.ColumnSpan="3" Style="{DynamicResource BorderWithShadowStyle}">
+                            <Border Grid.Row="4" Style="{DynamicResource BorderWithShadowStyle}">
                                 <StackLayout>
                                     <Label Text="Promedio Repeticiones" 
                                    FontSize="10" 

@@ -582,33 +582,48 @@ namespace AnotadorGymApp.Data
                                                     .ThenInclude(exLog => exLog.WorkoutDay)                                                
                                                     .AsQueryable();
             
-                if(string.IsNullOrWhiteSpace(ejercicioBuscado))
+                if(!string.IsNullOrWhiteSpace(ejercicioBuscado))
                 {                
-                    consulta = consulta.Where(e => e.ExerciseLogs.Any(log => log.SetsLog.Any()));
+                    consulta = consulta.Where(e => e.Name.ToLower().Contains(ejercicioBuscado.ToLower()));
+                }
+                 
+                consulta = consulta.Where(e => e.ExerciseLogs.Any(log => log.SetsLog.Any()));                
+
+                if (filtroTiempoSeleccionado != "Todos")
+                {
+                    var dias = filtroTiempoSeleccionado switch
+                    {
+                        "Semana" => 7,
+                        "Mes" => 30,
+                        "3 Meses" => 90,
+                        _ => 0
+                    };
+
+                    var fechaLimite = DateTime.Today.AddDays(-dias);
+                    // **FILTRAR Y PROYECTAR: Esto sí filtra la lista interna**
+
+                    ejerciciosFiltrados = await consulta.Select(e => new Exercise
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        bodyPart = e.bodyPart,
+                        Iniciar = e.Iniciar,
+                        Ultimo = e.Ultimo,
+                        primaryMuscle = e.primaryMuscle,
+                        Mejor = e.Mejor,
+                        ExerciseLogs = e.ExerciseLogs.Where(log => log.WorkoutDay.Date >= fechaLimite && log.SetsLog.Any())
+                                                        .ToList()
+                    }).Where(e => e.ExerciseLogs.Any()).ToListAsync();
                 }
                 else
                 {
-                    consulta = consulta.Where(e => e.Name.ToLower().Contains(ejercicioBuscado.ToLower()) && e.ExerciseLogs.Any(exLog => exLog.SetsLog.Any()));
+                    ejerciciosFiltrados = await consulta.ToListAsync();
                 }
 
-                ejerciciosFiltrados = await consulta.ToListAsync();
-
-                ejerciciosFiltrados = filtroTiempoSeleccionado switch
-                {
-                    "Semana" => ejerciciosFiltrados.Where(e => TieneDatosRecientes(e, 7)).ToList(),
-                    "Mes" => ejerciciosFiltrados.Where(e => TieneDatosRecientes(e, 30)).ToList(),
-                    "3 Meses" => ejerciciosFiltrados.Where(e => TieneDatosRecientes(e, 90)).ToList(),
-                    _ => ejerciciosFiltrados
-                };
-                
-            }catch(Exception ex) { Debug.WriteLine(ex); }
+            }
+            catch (Exception ex) { Debug.WriteLine(ex); }
             return new ObservableCollection<Exercise>(ejerciciosFiltrados);
-        }
-        private bool TieneDatosRecientes(Exercise e, int dias)
-        {
-            var fechaLimite = DateTime.Today.AddDays(-dias);
-            return e.ExerciseLogs.Any(log => log.WorkoutDay.Date >= fechaLimite) == true;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-        }
+        }        
         #endregion
     }
 }

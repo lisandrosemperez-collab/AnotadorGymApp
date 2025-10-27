@@ -33,7 +33,7 @@ namespace AnotadorGymApp.RegistroEjercicios
             var logsOrdenados = ejercicio.ExerciseLogs?
                 .Where(e => e.PesoMaximo > 0)               
                 .OrderBy(e => e.WorkoutDay.Date)
-                .ToList() ?? new List<ExerciseLog>();
+                .ToList() ?? new List<ExerciseLog>(); //Si es todo null crea una lista vacia (new List<>)
 
             foreach (var diaEjercicio in logsOrdenados)
             {

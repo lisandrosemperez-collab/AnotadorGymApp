@@ -46,7 +46,7 @@ namespace AnotadorGymApp.RegistroEjercicios
             OnPropertyChanged(nameof(GraficoReps));
         }
 
-        private Exercise ejercicio;
+        private Exercise ejercicio = new Exercise();
         public Exercise Ejercicio
         {
             get => ejercicio; 
