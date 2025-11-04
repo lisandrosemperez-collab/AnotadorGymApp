@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using AnotadorGymApp.Data;
-using AnotadorGymApp.Datos;
 using System.Data;
 using JsonDb;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -20,12 +19,27 @@ internal class Program
 
     private static readonly Uri Sourceuri = new Uri("https://jsoninglesgym.blob.core.windows.net/prueba-traduccion?sp=racwdl&st=2025-04-07T06:50:09Z&se=2025-04-08T02:57:09Z&spr=https&sv=2024-11-04&sr=c&sig=r0yvWvvfX2ZwH34WwTTxBACo%2FMuAy3ogSuWne8%2BIzRg%3D");
     private static readonly Uri Targeteuri = new Uri($"https://jsoninglesgym.blob.core.windows.net/prueba-traducida?sp=racwl&st=2025-04-07T07:00:53Z&se=2025-04-08T03:03:53Z&spr=https&sv=2024-11-04&sr=c&sig=mAv%2BjYT6%2Fe1skb6kJj0l9OoqZ%2BzfhNItmJ9n65N2CtI%3D");
-    private static string rutaEntrada = "C:\\Users\\Admin\\Desktop\\back\\ejerciciosReducidoTraducido1.json";
-    private static string rutaSalida = "C:\\Users\\Admin\\Desktop\\back\\ejerciciosReducidoTraducido2.json";
+    private static string rutaEntrada = "C:\\Users\\Admin\\Desktop\\back\\ejerciciosOrginal.json";
+    private static string rutaSalida = "C:\\Users\\Admin\\Desktop\\back\\ejerciciosModificado.json";
     static async Task Main(string[] args)
     {
-        await CaracteresEscapados();
-        //await TraducirEjerciciosConAzureAsync();        
+        //await CaracteresEscapados();
+        //await TraducirEjerciciosConAzureAsync();
+        await ObtenerExercisesNombres();
+    }
+
+    private static async Task ObtenerExercisesNombres()
+    {
+        var exercises = JsonSerializer.Deserialize<List<ExercisesNames>>(File.ReadAllText(rutaEntrada));
+        var opcionesJson = new JsonSerializerOptions
+        {
+            WriteIndented = true,
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        };
+        string contenidolimpio = JsonSerializer.Serialize(exercises,opcionesJson);
+        File.WriteAllText(rutaSalida, contenidolimpio);
+        Console.WriteLine("✅ Archivo limpiado y guardado correctamente.");
+
     }
 
     private static async Task CaracteresEscapados()
