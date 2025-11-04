@@ -57,7 +57,6 @@ internal class Program
         Console.WriteLine("✅ Archivo limpiado y guardado correctamente.");
 
     }
-
     private static async Task TraducirEjerciciosConAzureAsync()
     {
         // Cargar JSON original
