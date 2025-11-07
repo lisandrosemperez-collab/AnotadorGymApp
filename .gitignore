@@ -4,6 +4,9 @@
 *.userosscache
 *.sln.docstates
 
+#JsonDb
+.JsonDb/
+
 # MAUI
 bin/
 obj/
