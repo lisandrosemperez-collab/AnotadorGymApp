@@ -5,7 +5,7 @@
 *.sln.docstates
 
 #JsonDb
-.JsonDb/
+JsonDb/
 
 # MAUI
 bin/
