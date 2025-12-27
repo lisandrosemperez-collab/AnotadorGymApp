@@ -12,21 +12,25 @@ using System.Text.Json.Nodes;
 using System.Text.Json;
 using AnotadorGymApp.Data;
 using AnotadorGymApp.MainPageViews;
+using AnotadorGymApp.Services;
 
 namespace AnotadorGymApp
 {    
     public partial class App : Application
-    {        
-        //DataService _dataService = new DataService();        
-        private DataService _dataService;        
-        public App(DataService dataService)
+    {                
+        private DataService _dataService;         
+        private ConfigService _configService;
+        private ImagenPersistenteService _imagenPersistenteService;
+        public App(DataService dataService,ConfigService configService,ImagenPersistenteService imagenPersistenteService)
         {            
-            _dataService = dataService;                       
-            Application.Current.UserAppTheme = AppTheme.Light;            
+            _dataService = dataService;        
+            _configService = configService;
+            _imagenPersistenteService = imagenPersistenteService;
             try
             {
                 InitializeComponent();
-                MainPage = new SplashPage(_dataService);
+                _configService.AplicarTema();               
+                MainPage = new SplashPage(_dataService,_configService,imagenPersistenteService);
                 Debug.WriteLine("🚀 App creada - SplashPage iniciada");
             }
             catch (Exception ex)

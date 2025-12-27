@@ -30,8 +30,45 @@ namespace AnotadorGymApp.Data
 
         #region EF
         public int RutinaId { get; set; }
-        public ICollection<RutinaSemana> Semanas { get; set; } = new List<RutinaSemana>();        
-        public ObservableCollection<RutinaSemana> SemanasObservable { get; set; } = new ObservableCollection<RutinaSemana>();
+        public bool Completado { get; set; } = false;
+        public ICollection<RutinaSemana> Semanas { get; set; } = new List<RutinaSemana>();
+        [NotMapped]
+        private ObservableCollection<RutinaSemana> _semanasObservable;
+        [NotMapped]
+        public ObservableCollection<RutinaSemana> SemanasObservable
+        {
+            get => _semanasObservable;
+            set
+            {
+                if (_semanasObservable == value) return;
+                
+                if (_semanasObservable != null)
+                {
+                    _semanasObservable.CollectionChanged -= OnSemanasCollectionChanged;
+                }
+
+                _semanasObservable = value;
+
+                if (_semanasObservable != null)
+                {
+                    _semanasObservable.CollectionChanged += OnSemanasCollectionChanged;
+                    RecalcularSemanaIdsUI();
+                }
+            }
+        }
+        private void OnSemanasCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {            
+            RecalcularSemanaIdsUI();
+        }
+        private void RecalcularSemanaIdsUI()
+        {
+            if (_semanasObservable == null) return;
+
+            for (int i = 0; i < _semanasObservable.Count; i++)
+            {
+                _semanasObservable[i].SemanaIdUI = i + 1;
+            }
+        }
         #endregion
 
         #region PROPS
@@ -39,16 +76,22 @@ namespace AnotadorGymApp.Data
         private string nombre = string.Empty;
         private string? descripcion;
         private bool activa;
+        private string? tiempoPorSesion = string.Empty;
+        private string? dificultad = string.Empty;
+        private string? frecuenciaPorGrupo = string.Empty;
+        public bool Activa { get { return activa; }set { activa = value; } }
+        public string? ImageSource {get {return imageSource; } set { imageSource = value; OnPropertyChanged(nameof(ImageSource)); } }
+        public string Nombre { get { return nombre; } set { nombre = value;OnPropertyChanged(nameof(Nombre)); } }
+        public string? Descripcion { get { return descripcion; } set { descripcion = value; OnPropertyChanged(nameof(Descripcion)); } }
+        public string? TiempoPorSesion { get { return tiempoPorSesion; } set { tiempoPorSesion = value; OnPropertyChanged(nameof(TiempoPorSesion)); } }
+        public string? Dificultad { get { return dificultad; } set { dificultad = value; OnPropertyChanged(nameof(Dificultad)); } }
+        public string? FrecuenciaPorGrupo { get { return frecuenciaPorGrupo; } set { frecuenciaPorGrupo = value; OnPropertyChanged(nameof(FrecuenciaPorGrupo)); } }
+        #endregion                
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        public bool Activa { get { return activa; }set { activa = value; } }
-        public string? ImageSource {get {return imageSource; } set { imageSource = value; } }
-        public string Nombre { get { return nombre; } set { nombre = value;OnPropertyChanged(nameof(Nombre)); } }
-        public string? Descripcion { get { return descripcion; } set { descripcion = value; } }
-        #endregion        
     }    
     public class RutinaSemana : INotifyPropertyChanged
     {
@@ -56,34 +99,75 @@ namespace AnotadorGymApp.Data
         public int RutinaId { get; set; }
         public Rutinas Rutina { get; set; }
         public ICollection<RutinaDia> Dias { get; set; } = new List<RutinaDia>();
+        public bool Completado { get; set; } = false;
         [NotMapped]
-        public ObservableCollection<RutinaDia> DiasObservable { get; set; } = new ObservableCollection<RutinaDia>();
-        public string NombreSemana { get; set; } = string.Empty;
-        private bool _isExpanded;
+        private ObservableCollection<RutinaDia> _diasObservable;
         [NotMapped]
-        public bool IsExpanded
+        public ObservableCollection<RutinaDia> DiasObservable
         {
-            get => _isExpanded;
+            get => _diasObservable;
             set
             {
-                if (_isExpanded != value)
+                if (_diasObservable == value) return;
+
+                if (_diasObservable != null)
                 {
-                    _isExpanded = value;
-                    OnPropertyChanged(nameof(IsExpanded));
+                    _diasObservable.CollectionChanged -= OnDiasCollectionChanged;
+                }
+
+                _diasObservable = value;
+
+                if (_diasObservable != null)
+                {
+                    _diasObservable.CollectionChanged += OnDiasCollectionChanged;
+                    RecalcularDiaIdsUI(); // ¡Aquí se dispara el cálculo!
                 }
             }
         }
+        private void OnDiasCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {            
+            RecalcularDiaIdsUI();
+        }
+        private void RecalcularDiaIdsUI()
+        {
+            if (_diasObservable == null) return;
+
+            for (int i = 0; i < _diasObservable.Count; i++)
+            {
+                _diasObservable[i].DiaIdUI = i + 1;                
+                _diasObservable[i].NombreRutinaDia = $"Día {i + 1}";
+            }
+        }
+        public string NombreSemana { get; set; } = string.Empty;
+        
+        [NotMapped]
+        private bool seleccionado;
+        [NotMapped]
+        public bool Seleccionado
+        {
+            get => seleccionado;
+            set
+            {
+                if (seleccionado != value)
+                {
+                    seleccionado = value;
+                    OnPropertyChanged(nameof(Seleccionado));
+                }
+            }
+        }        
+        public int? SemanaIdUI { get; set; }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string name)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
     public class RutinaDia : INotifyPropertyChanged
     {             
-        public int DiaId { get; set; }
-        public int RutinaId { get; set; }
+        public int DiaId { get; set; }        
+        public int DiaIdUI { get; set; }        
         public int SemanaId { get; set; }
         public RutinaSemana Semana { get; set; }
-        public bool Completado { get; set; }
+        public bool Completado { get; set; } = false;
         public string NombreRutinaDia { get; set; } = string.Empty;
         public string Notas { get; set; } = string.Empty;                
         public ICollection<RutinaEjercicio> Ejercicios { get; set; } = new List<RutinaEjercicio>();
@@ -107,14 +191,55 @@ namespace AnotadorGymApp.Data
         }
         public int EjercicioId { get; set; }
         public int ExerciseId { get; set; }
-        public int DiaId { get; set; }
-        public int RutinaId { get; set; }
-        public int SemanaId { get; set; }
+        public int DiaId { get; set; }                
         public Exercise Exercise { get; set; }         
         public RutinaDia Dia { get; set; }        
         public ICollection<RutinaSeries> Series { get; set; } = new List<RutinaSeries>();
         [NotMapped]
-        public ObservableCollection<RutinaSeries> SeriesObservable { get; set; } = new ObservableCollection<RutinaSeries>();        
+        private ObservableCollection<RutinaSeries> seriesObservable;
+        [NotMapped]
+        public ObservableCollection<RutinaSeries> SeriesObservable
+        {
+            get => seriesObservable;
+            set
+            {
+                if (seriesObservable == value) return;
+
+                if (seriesObservable != null)
+                {
+                    seriesObservable.CollectionChanged -= OnSeriesCollectionChanged;
+                }
+
+                seriesObservable = value;
+
+                if (seriesObservable != null)
+                {
+                    seriesObservable.CollectionChanged += OnSeriesCollectionChanged;
+                    RecalcularSeriesIdsUI(); // ¡Aquí se dispara el cálculo!
+                }
+            }
+        }
+        private void OnSeriesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            // Se dispara cuando se agregan/eliminan/reordenan días
+            RecalcularSeriesIdsUI();
+        }
+        private void RecalcularSeriesIdsUI()
+        {
+            if (seriesObservable == null) return;
+
+            for (int i = 0; i < seriesObservable.Count; i++)
+            {
+                seriesObservable[i].SerieIdUI = i + 1;                                
+            }
+        }
+
+        [NotMapped]
+        public int SeriesTotales => SeriesObservable?.Count ?? 0;
+        [NotMapped]
+        public int SeriesCompletadas => SeriesObservable?.Count(s => s.EstadoSerie == 3) ?? 0;
+        [NotMapped]        
+        public string ProgresoSeriesFormateado => $"📊 {SeriesCompletadas}/{SeriesTotales} series";
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
@@ -168,17 +293,13 @@ namespace AnotadorGymApp.Data
         }  
         
         #region Entity
-        public int EjercicioId { get; set; }
-        public int RutinaId { get; set; }
-        public int SemanaId { get; set; }
-        public int DiaId { get; set; }
-        public int RutinaSeriesId { get; set; }
+        public int EjercicioId { get; set; }        
+        public int SerieId { get; set; }
         public RutinaEjercicio Ejercicio { get; set; }
 
         #endregion
 
-        #region UI        
-
+        #region UI                
         [NotMapped]
         public int SerieIdUI { get; set; }
         [NotMapped]

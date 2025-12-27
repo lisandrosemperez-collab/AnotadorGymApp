@@ -8,10 +8,10 @@ namespace AnotadorGymApp.Data
 {
     public class ExerciseJson
     {         
-        public string name { get; set; }
+        public string Name { get; set; }
         public string bodyPart { get; set; }
-        public string primaryMuscle { get; set; }
-        public List<string> secondaryMuscles { get; set; }
+        public Muscle primaryMuscle { get; set; }
+        public List<Muscle> secondaryMuscles { get; set; } = new List<Muscle>();
         
-    }
+    }        
 }

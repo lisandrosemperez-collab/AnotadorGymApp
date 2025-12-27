@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:charts ="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             xmlns:converters="clr-namespace:AnotadorGymApp.MetricasPageViews"
+             x:Class="AnotadorGymApp.MetricasPageViews.MetricasPage"
+             Title="MetricasPage" Shell.NavBarIsVisible="False">
+    <ContentPage.Resources>
+        <converters:TimeFilterToColorConverter x:Key="TimeFilterToColorConverter"/>
+    </ContentPage.Resources>
+
+    <ScrollView IsClippedToBounds="False" Padding="0" Margin="0">
+        
+        <VerticalStackLayout Padding="0" HorizontalOptions="Center" IsClippedToBounds="False" Margin="0" Spacing="0">
+
+            <Border Style="{DynamicResource BorderWithShadowStyle}"
+                    BackgroundColor="{DynamicResource GreenLightest}"
+                    Padding="7,10"
+                    Margin="15">
+                <!-- SEARCH BAR -->
+                <SearchBar x:Name="SearchBarEjercicios"
+                               Placeholder="Buscar ejercicios..."                               
+                               CancelButtonColor="{DynamicResource GreenPrimary}"                               
+                               Text="{Binding EjercicioBuscado,Mode=TwoWay}">
+                </SearchBar>
+            </Border>
+
+            <!-- FILTROS DE TIEMPO -->
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="0" Padding="0" IsClippedToBounds="False" HeightRequest="70">
+                                    
+                <Grid Margin="0" IsClippedToBounds="False" Padding="10,0,10,0" ColumnDefinitions="Auto,Auto,Auto,Auto" ColumnSpacing="10">
+                    <!-- TODOS -->
+                    <Button Text="🕒 Todos" Grid.Column="0"
+                            FontSize="12"
+                            BackgroundColor="{Binding FiltroTiempoSeleccionado, Converter={StaticResource TimeFilterToColorConverter}, ConverterParameter='Todos'}"                            
+                            BorderColor="{DynamicResource GreenPrimary}"
+                            BorderWidth="1"
+                            CornerRadius="15"
+                            Padding="15,8"
+                            HeightRequest="40"
+                            Command="{Binding SeleccionarFiltroTiempoCommand}"
+                            CommandParameter="Todos"/>
+
+                    <!-- SEMANA -->
+                    <Button Text="📅 Última semana" Grid.Column="1"                       
+                            FontSize="12"
+                            BackgroundColor="{Binding FiltroTiempoSeleccionado, Converter={StaticResource TimeFilterToColorConverter}, ConverterParameter='Semana'}"                            
+                            BorderColor="{DynamicResource GreenPrimary}"
+                            BorderWidth="1"
+                            CornerRadius="15"
+                            Padding="15,8"
+                            HeightRequest="40"
+                            Command="{Binding SeleccionarFiltroTiempoCommand}"
+                            CommandParameter="Semana"/>
+
+                    <!-- MES -->
+                    <Button Text="📊 Último mes" Grid.Column="2"     
+                            FontSize="12"
+                            BackgroundColor="{Binding FiltroTiempoSeleccionado, Converter={StaticResource TimeFilterToColorConverter}, ConverterParameter='Mes'}"                            
+                            BorderColor="{DynamicResource GreenPrimary}"
+                            BorderWidth="1"
+                            CornerRadius="15"
+                            Padding="15,8"
+                            HeightRequest="40"
+                            Command="{Binding SeleccionarFiltroTiempoCommand}"
+                            CommandParameter="Mes"/>
+
+                    <!-- 3 MESES -->
+                    <Button Text="📈 Últimos 3 meses" Grid.Column="3"
+                            FontSize="12"
+                            BackgroundColor="{Binding FiltroTiempoSeleccionado, Converter={StaticResource TimeFilterToColorConverter}, ConverterParameter='3 Meses'}"                            
+                            BorderColor="{DynamicResource GreenPrimary}"
+                            BorderWidth="1"
+                            CornerRadius="15"
+                            Padding="15,8"
+                            HeightRequest="40"                            
+                            Command="{Binding SeleccionarFiltroTiempoCommand}"
+                            CommandParameter="3 Meses"/>
+
+                </Grid>
+                
+            </ScrollView>
+
+            <CollectionView ItemsSource="{Binding EjerciciosConMetricas}" EmptyView="No hay ejercicios recientes para mostrar" Margin="0">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="0" Orientation="Vertical"></LinearItemsLayout>
+                </CollectionView.ItemsLayout>
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+                        <Grid   RowDefinitions="Auto,Auto,*,*,*,*"                                   
+                                  RowSpacing="12" Padding="15"
+                                  ColumnSpacing="10" Margin="0" IsClippedToBounds="False">
+
+                            <!-- HEADER - Nombre del Ejercicio -->
+                            <Border Grid.Row="0" 
+                                    BackgroundColor="{DynamicResource SurfaceColor}"
+                                    Padding="0,10,10,0"
+                                    Stroke="{DynamicResource GreenPrimary}"
+                                    StrokeThickness="1" Margin="0"
+                                    StrokeShape="RoundRectangle 10">
+
+                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="0">
+                                    <!-- NOMBRE Y GRUPO MUSCULAR -->
+                                    <StackLayout Grid.Column="0" 
+                                                 VerticalOptions="Center"
+                                                 Margin="10,0,10,0">
+                                        <Label Text="{Binding Ejercicio.Name}" 
+                                                FontAttributes="Bold" 
+                                                FontSize="16"
+                                                TextColor="{DynamicResource GreenDarker}"
+                                                MaxLines="3"                                               
+                                                LineBreakMode="TailTruncation"/>
+                                        <Label Text="{Binding Ejercicio.primaryMuscle.Name}" 
+                                        FontSize="12"
+                                        TextColor="{DynamicResource GreenDark}"
+                                        MaxLines="1"/>
+                                    </StackLayout>
+
+                                    <!-- MÉTRICAS RÁPIDAS -->
+                                    <StackLayout Grid.Column="1" 
+                                         Orientation="Horizontal" 
+                                         Spacing="15"
+                                         VerticalOptions="Center">
+                                        <VerticalStackLayout HorizontalOptions="Center" BackgroundColor="Transparent">
+                                            <Label Text="SESIONES" 
+                                                   FontSize="9"
+                                                   TextColor="{DynamicResource GreenDark}"
+                                                   HorizontalOptions="Center"/>
+                                            <Label Text="{Binding TotalSesiones}" 
+                                                   FontAttributes="Bold"
+                                                   FontSize="14"
+                                                   TextColor="{DynamicResource GreenDarker}"
+                                                   HorizontalOptions="Center"/>
+                                        </VerticalStackLayout>
+
+                                        <BoxView WidthRequest="1" 
+                                                 HeightRequest="20"
+                                                 Color="{DynamicResource GreenPrimary}"
+                                                 VerticalOptions="Center"/>
+
+                                        <VerticalStackLayout HorizontalOptions="Center" BackgroundColor="Transparent">
+                                            <Label Text="RÉCORD"
+                                                    FontSize="9"
+                                                    TextColor="{DynamicResource GreenDark}"
+                                                    HorizontalOptions="Center"/>
+                                            <Label Text="HISTORICO"
+                                                    FontSize="9"
+                                                    TextColor="{DynamicResource GreenDark}"
+                                                    HorizontalOptions="Center"/>
+                                            <Label Text="{Binding Ejercicio.MejorPeso, StringFormat='{0} kg'}" 
+                                                    FontAttributes="Bold"
+                                                    FontSize="14"
+                                                    TextColor="{DynamicResource GreenDarker}"
+                                                    HorizontalOptions="Center"/>
+                                        </VerticalStackLayout>
+                                    </StackLayout>
+                                </Grid>
+
+                            </Border>
+
+                            <!-- PICKER TIPO SERIES -->
+                            <!--<Grid ColumnDefinitions="Auto,*" IsClippedToBounds="False" Grid.ColumnSpan="3" Grid.Row="1" ColumnSpacing="10">
+                                
+                                <Label Text="Series:" 
+                                        FontSize="9"
+                                        TextColor="{DynamicResource GreenDark}"
+                                        VerticalOptions="Center" Grid.Column="0"/>
+
+                                <CollectionView ItemsSource="{Binding TiposSerieFiltros}"
+                                                SelectionMode="Single"                                                
+                                                SelectedItem="{Binding TiposSerieSeleccionado}"                                                
+                                                HeightRequest="32" Grid.Column="1" HorizontalScrollBarVisibility="Never">
+
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout Orientation="Horizontal"/>
+                                    </CollectionView.ItemsLayout>
+
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            
+                                                <Border BackgroundColor="{DynamicResource GreenLighter}"
+                                                        Stroke="{DynamicResource GreenPrimary}"
+                                                        StrokeThickness="1"
+                                                        StrokeShape="RoundRectangle 40"
+                                                        Padding="8,4">
+
+                                                    <Label Text="{Binding .}"
+                                                           FontSize="9"
+                                                           TextColor="{DynamicResource GreenDarker}"/>
+                                                </Border>
+                                            
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                            </Grid>-->
+
+                            <!-- GRÁFICOS -->
+                            <Border Grid.Row="2" Style="{DynamicResource BorderWithShadowStyle}">
+                                <StackLayout BackgroundColor="{DynamicResource BackgroundColor}">
+                                    <Label Text="Peso Maximos x Dia(kg)" 
+                                               FontSize="10" 
+                                               TextColor="{DynamicResource PrimaryTextColor}"
+                                               HorizontalOptions="Center" Margin="0,0,0,10"/>
+                                    <charts:ChartView Chart="{Binding GraficoPeso}" 
+                                           HeightRequest="180" Margin="0"/>
+                                </StackLayout>
+                            </Border>
+
+                            <Border Grid.Row="3" Style="{DynamicResource BorderWithShadowStyle}">
+                                <StackLayout BackgroundColor="{DynamicResource BackgroundColor}">
+                                    <Label Text="Volumen Maximo x Dia (kg)" 
+                                           FontSize="10" 
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           HorizontalOptions="Center" Margin="0,0,0,10"/>
+                                    <charts:ChartView Chart="{Binding GraficoVolumen}" 
+                                           HeightRequest="180"
+                                           BackgroundColor="Transparent"/>
+                                </StackLayout>
+                            </Border>
+
+                            <Border Grid.Row="4" Style="{DynamicResource BorderWithShadowStyle}">
+                                <StackLayout BackgroundColor="{DynamicResource BackgroundColor}">
+                                    <Label Text="Promedio Repeticiones" 
+                                           FontSize="10" 
+                                           TextColor="{DynamicResource PrimaryTextColor}"
+                                           HorizontalOptions="Center" Margin="0,0,0,10"/>
+                                    <charts:ChartView Chart="{Binding GraficoReps}" 
+                                           HeightRequest="180"
+                                           BackgroundColor="Transparent"/>
+                                </StackLayout>
+                            </Border>
+
+                        </Grid>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -19,7 +19,7 @@ namespace AnotadorGymApp;
 public partial class ComienzoRutinaPage : ContentPage, INotifyPropertyChanged
 {
     //Guardado de RutinaActual    
-    public DataService dataService;
+    private readonly DataService dataService;
     public int RutinaId { get; set; }
     public Rutinas RutinaActual { get; set; } = new Rutinas();
     public WorkoutDay WorkoutDayActual { get; set; } = new WorkoutDay();    
@@ -109,106 +109,78 @@ public partial class ComienzoRutinaPage : ContentPage, INotifyPropertyChanged
     }
     private async void GuardarSerie(RutinaSeries rutinaSeries)
     {
-        #region ExerciseLog
-        var ExerciseLog = WorkoutDayActual.ExerciseLogs.FirstOrDefault(w => w.ExerciseId == rutinaSeries.Ejercicio.ExerciseId);
-        
-        if (ExerciseLog == null)
+        try
         {
-            ExerciseLog = new ExerciseLog()
+            if (rutinaSeries?.Ejercicio?.Exercise == null)
             {
-                Exercise = rutinaSeries.Ejercicio.Exercise,
-                ExerciseId = rutinaSeries.Ejercicio.ExerciseId
-            };
-            WorkoutDayActual.ExerciseLogs.Add(ExerciseLog);            
-        }
-        #endregion
+                Debug.WriteLine("⚠️ RutinaSeries o Exercise nulo");
+                return;
+            }
 
-        #region SetLog
-        var SetLog = ExerciseLog.SetsLog?.FirstOrDefault(s => s.SetLogId == rutinaSeries.SetLog.SetLogId);
+            var ExerciseLog = await dataService.ObtenerOCrearExerciseLogAsync(rutinaSeries, WorkoutDayActual);
+            Debug.WriteLine($"📝 ExerciseLog creado/obtenido - ID: {ExerciseLog?.ExerciseLogId}");
 
-        if (SetLog == null)
-        {
-            SetLog = new SetLog();
-            ExerciseLog.SetsLog.Add(SetLog);
-        }
-        SetLog.Kilos = rutinaSeries.KilosTemp;
-        SetLog.Reps = rutinaSeries.RepsTemp;
-        SetLog.Tipo = rutinaSeries.Tipo;
-        #endregion
+            var SetLog = await dataService.ObtenerOCrearSetLogAsync(ExerciseLog, rutinaSeries);
+            Debug.WriteLine($"📝 SetLog creado/obtenido - Kilos: {SetLog?.Kilos}kg x {SetLog?.Reps}");
 
-        #region Exercise
+            await dataService.ActualizarProgresoExerciseAsync(rutinaSeries.Ejercicio.Exercise,SetLog);                                      
 
-        var Exercise = rutinaSeries.Ejercicio.Exercise;
-        
-        if (Exercise != null)
-        {
-            Exercise.dataService = dataService;
+            #region Verificar Si El Ejercicio Esta Completado
+            bool SeriesCompletadas = rutinaSeries.Ejercicio.Series.All(s => s.EstadoSerie == 4);
+            rutinaSeries.Ejercicio.Completado = SeriesCompletadas;        
+            Debug.WriteLine($"📊 Ejercicio {rutinaSeries.Ejercicio.Exercise?.Name} - " +
+                           $"Completado: {SeriesCompletadas} " +
+                           $"({rutinaSeries.Ejercicio.Series?.Count(s => s.EstadoSerie == 4)}/" +
+                           $"{rutinaSeries.Ejercicio.Series?.Count})");
+            #endregion
 
-            if (SetLog.Tipo == TipoSerie.Max_Rm || SetLog.Tipo == TipoSerie.Normal)
+            #region Verificar Si El Dia Esta Completado
+            RutinaDia itemDia = CollectionDias.SelectedItem as RutinaDia;
+            if (itemDia != null)
             {
-                // Validar que los kilos sean válidos
-                if (SetLog.Kilos > 0 && SetLog.Reps > 0) 
+                bool diaCompletado = await dataService.VerificarDiaCompletadoAsync(itemDia.DiaId);
+            
+                if (diaCompletado && !itemDia.Completado)
                 {
-                    // ÚLTIMO: Siempre actualizar
-                    Exercise.Ultimo = SetLog.Kilos;
-                    if (Exercise.Mejor == null || SetLog.Kilos > Exercise.Mejor)
-                    {
-                        Exercise.Mejor = SetLog.Kilos;
-                        Debug.WriteLine($"🏆 Nuevo récord personal: {SetLog.Kilos}kg");
-                    }
-
-                    // INICIAR: Solo si es nulo o cero y si es MaxRm (primera vez)
-                    if (SetLog.Tipo == TipoSerie.Max_Rm)
-                    {
-                        if (Exercise.Iniciar == 0 || Exercise.Iniciar == null)
-                        {
-                            Exercise.Iniciar = SetLog.Kilos;
-                            Debug.WriteLine($"🎯 Primer RM guardado como Iniciar: {SetLog.Kilos}kg");
-                        }
-                        // MEJOR: Solo si es mejor que el anterior
-                    }
-
-                    Debug.WriteLine($"📊 Progreso actual - Iniciar: {Exercise.Iniciar}kg, Mejor: {Exercise.Mejor}kg, Último: {Exercise.Ultimo}kg");                
+                    itemDia.Completado = true;
+                    RestTimer.Stop();
+                    rutinaSeries.DetenerRest();
+                    IniciarCronometro_Clicked(null, EventArgs.Empty);
+                    await Shell.Current.DisplayAlert(
+                                        "✅ Día Completado",
+                                        "¡Felicidades! Has completado todos los ejercicios del día.\n\n" +
+                                        "¿Qué deseas hacer?\n" +
+                                        "• Agregar ejercicio extra\n" +
+                                        "• Finalizar el día",
+                                        "Continuar");
+                    Debug.WriteLine($"📅 Día {itemDia.NombreRutinaDia} marcado como completado");
                 }
-                else
+                else { itemDia.Completado = false; }
+            }
+            #endregion
+
+            #region Verificar Si La Semana Se Completo
+            RutinaSemana itemSemana = CollectionSemanas.SelectedItem as RutinaSemana;
+            if (itemSemana != null)
+            {
+                bool semanaCompleta = await dataService.VerificarSemanaCompletadoAsync(itemSemana.SemanaId);
+                if (semanaCompleta && !itemSemana.Completado)
                 {
-                    Debug.WriteLine($"⚠️ SetLog con kilos/reps inválidos: {SetLog.Kilos}kg x {SetLog.Reps}");
+                    itemSemana.Completado = true;
+                    await Shell.Current.DisplayAlert("Rutina Terminada", "Rutina Terminada, Empieze una nueva rutina", "Ok");
                 }
+            }            
+            #endregion
 
-            }
-            else
-            {
-                Debug.WriteLine($"ℹ️ Serie de tipo {SetLog.Tipo} - No afecta progreso RM");
-            }
-        }                        
-        #endregion
+            await dataService._database.SaveChangesAsync();
+            Debug.WriteLine("💾 Cambios guardados en la base de datos");
 
-        #region Verificar Si El Ejercicio Esta Completado
-        bool SeriesCompletadas = rutinaSeries.Ejercicio.Series.All(s => s.EstadoSerie == 4);
-        rutinaSeries.Ejercicio.Completado = SeriesCompletadas;
-        Debug.WriteLine($"Total series: {rutinaSeries.Ejercicio.Series?.Count}");
-        Debug.WriteLine($"¿Todas completadas? {SeriesCompletadas}");
-        #endregion
-
-        #region Verificar Si El Dia Esta Completado
-        RutinaDia itemDia = CollectionDias.SelectedItem as RutinaDia;
-        if (itemDia != null)
-        {
-            bool EjerciciosCompletados = itemDia.Ejercicios?.All(eje => eje.Completado) ?? false;
-        
-            if (EjerciciosCompletados)
-            {
-                itemDia.Completado = true;
-                RestTimer.Stop();
-                rutinaSeries.DetenerRest();
-                IniciarCronometro_Clicked(null, EventArgs.Empty);
-                await Shell.Current.DisplayAlert("Terminado", "Ejercicios Completados, Agregue uno nuevo o Finalize el Dia", "Ok");
-            }
-            else { itemDia.Completado = false; }
         }
-        #endregion
-
-        await dataService._database.SaveChangesAsync();    
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"❌ Error en GuardarSerie: {ex.Message}");
+            await Shell.Current.DisplayAlert("Error", "No se pudo guardar la serie", "OK");
+        }
     }
     private async void IncicarActwatch(RutinaSeries rutinaSeries)
     {                
@@ -312,7 +284,7 @@ public partial class ComienzoRutinaPage : ContentPage, INotifyPropertyChanged
 
         if (itemEjercicio != null)
         {
-            await dataService.GuardarRutinaSerie(itemEjercicio);
+            await dataService.AgregarRutinaSerie(itemEjercicio);
             //OnPropertyChanged(nameof(itemEjercicio.SeriesObservable));
         }
     }
@@ -405,7 +377,9 @@ public partial class ComienzoRutinaPage : ContentPage, INotifyPropertyChanged
 
 
         #region Guardar Descanso en TempDescanso
-        await dataService.DebugDescansoEnBD();
+#if DEBUG
+        //await dataService.DebugDescansoEnBD();
+#endif
         var todasSeries = RutinaActual.SemanasObservable
                 .SelectMany(s => s.DiasObservable)
                 .SelectMany(d => d.EjerciciosObservable)
@@ -413,7 +387,7 @@ public partial class ComienzoRutinaPage : ContentPage, INotifyPropertyChanged
                 .ToList();
         foreach (var serie in todasSeries)
         {
-            Debug.WriteLine($"Serie {serie.RutinaSeriesId}: " +
+            Debug.WriteLine($"Serie {serie.SerieId}: " +
                    $"Descanso es null? {serie.Descanso == null}, " +
                    $"Valor: {serie.Descanso}");                      
 
@@ -443,10 +417,10 @@ public partial class ComienzoRutinaPage : ContentPage, INotifyPropertyChanged
     private async void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
     {               
 
-        if (sender is Microsoft.Maui.Controls.Grid grid)
+        if (sender is Microsoft.Maui.Controls.Grid Grid)
         {
-            CollectionView CvSeries = grid.FindByName("CvSeries") as CollectionView;
-            Button AñadirSeriesButton = grid.FindByName("AñadirSerieButton") as Button;
+            CollectionView CvSeries = Grid.FindByName("CvSeries") as CollectionView;
+            Button AñadirSeriesButton = Grid.FindByName("AñadirSerieButton") as Button;
             
             if (CvSeries.IsVisible)
             {

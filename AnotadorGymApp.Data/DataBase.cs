@@ -42,7 +42,7 @@ namespace AnotadorGymApp.Data
             #region //Exercises //TERMINADO
             model.Entity<Exercise>(entity =>
             {
-                entity.HasKey(r => r.Id);
+                entity.HasKey(r => r.ExerciseId);
 
                 entity.HasMany(r => r.ExerciseLogs)
                     .WithOne(r => r.Exercise)
@@ -112,7 +112,9 @@ namespace AnotadorGymApp.Data
             model.Entity<Rutinas>(entity =>
             {                
                 entity.Property(r => r.Nombre).IsRequired(true);
-                entity.HasKey(r => r.RutinaId);                
+                entity.HasKey(r => r.RutinaId);
+                entity.Property(r => r.RutinaId).ValueGeneratedOnAdd();
+
                 entity.HasMany(r => r.Semanas)
                     .WithOne(r => r.Rutina)
                     .HasForeignKey(r => r.RutinaId)
@@ -120,11 +122,14 @@ namespace AnotadorGymApp.Data
             });
             model.Entity<RutinaSemana>(entity =>
             {
-                entity.HasKey(r => new { r.RutinaId, r.SemanaId });
+                entity.HasKey(r => r.SemanaId);
+                entity.Property(r => r.SemanaId).ValueGeneratedOnAdd();
+
                 entity.HasMany(r => r.Dias)
                     .WithOne(r => r.Semana)
-                    .HasForeignKey(r => new { r.RutinaId,r.SemanaId })
+                    .HasForeignKey(r => r.SemanaId )
                     .OnDelete(DeleteBehavior.Cascade);
+
                 entity.HasOne(rs => rs.Rutina)
                     .WithMany(r => r.Semanas)
                     .HasForeignKey(rs => rs.RutinaId)
@@ -132,41 +137,51 @@ namespace AnotadorGymApp.Data
             });                            
             model.Entity<RutinaDia>(entity =>
             {
-                entity.HasKey(r => new {r.RutinaId,r.SemanaId,r.DiaId});
+                entity.HasKey(r => r.DiaId);
+                entity.Property(r => r.DiaId).ValueGeneratedOnAdd();
 
                 entity.HasMany(r => r.Ejercicios)
                     .WithOne(r => r.Dia)
-                    .HasForeignKey(r => new {r.RutinaId,r.SemanaId, r.DiaId })
+                    .HasForeignKey(r => r.DiaId)
                     .OnDelete(DeleteBehavior.Cascade);
+                
                 entity.HasOne(rd => rd.Semana)
                     .WithMany(rs => rs.Dias)
-                    .HasForeignKey(rd => new { rd.RutinaId, rd.SemanaId })
+                    .HasForeignKey(rd => rd.SemanaId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
             model.Entity<RutinaEjercicio>(entity =>
             {
-                entity.HasKey(r => new {r.RutinaId,r.SemanaId, r.DiaId,r.EjercicioId });
+                entity.HasKey(r => r.EjercicioId );
+                entity.Property(r => r.EjercicioId).ValueGeneratedOnAdd();
                 
                 entity.HasMany(r => r.Series)
                     .WithOne(r => r.Ejercicio)
-                    .HasForeignKey(r => new {r.RutinaId,r.SemanaId,r.DiaId,r.EjercicioId})
+                    .HasForeignKey(r => r.EjercicioId)
                     .OnDelete(DeleteBehavior.Cascade);
+
                 entity.HasOne(re => re.Dia)
                     .WithMany(rd => rd.Ejercicios)
-                    .HasForeignKey(re => new { re.RutinaId, re.SemanaId, re.DiaId })
+                    .HasForeignKey(re => re.DiaId )
                     .OnDelete(DeleteBehavior.Cascade);
+
                 entity.HasOne(re => re.Exercise)
-                    .WithMany(re => re.RutinasEjercicios) // o .WithMany(e => e.RutinaEjercicios) si tenés navegación inversa
+                    .WithMany(re => re.RutinasEjercicios)
                     .HasForeignKey(re => re.ExerciseId)
-                    .OnDelete(DeleteBehavior.Cascade); // o Cascade si querés
+                    .OnDelete(DeleteBehavior.Cascade);
                 entity.Property(re => re.Completado).HasDefaultValue(false);
+
             });
             model.Entity<RutinaSeries>(entity =>
             {
-                entity.HasKey(r => new { r.RutinaId, r.SemanaId, r.DiaId, r.EjercicioId, r.RutinaSeriesId });
+                entity.HasKey(r => r.SerieId );
+                entity.Property(r => r.SerieId).ValueGeneratedOnAdd();
+
                 entity.HasOne(r => r.Ejercicio)
                         .WithMany(r => r.Series)
-                        .HasForeignKey(r => new { r.RutinaId, r.SemanaId, r.DiaId, r.EjercicioId });
+                        .HasForeignKey(r => r.EjercicioId)
+                        .OnDelete(DeleteBehavior.Cascade);
+
                 entity.Property(e => e.Descanso)
                         .HasConversion(
                             v => v.HasValue ? v.Value.ToString(@"hh\:mm\:ss") : "00:00:00",

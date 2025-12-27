@@ -7,8 +7,8 @@ using System.Diagnostics;
 namespace AnotadorGymApp.PopUp;
 
 public partial class BuscarEjerciciosPopUp : Popup
-{    
-    public DataService _dataservice;    
+{
+    public readonly DataService _dataservice;    
     public List<Exercise> TodosEjercicios { get; set; } = new List<Exercise>();
     public ObservableCollection<Exercise> FiltradosEjercicios { get; set; } = new ObservableCollection<Exercise>();
     public ObservableCollection<Exercise> SeleccionadosEjercicios { get; set; } = new ObservableCollection<Exercise>();

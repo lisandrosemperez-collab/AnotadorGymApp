@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AnotadorGymApp.ConfiguracionPage.ConfigPage"
+             Title="Configuración">
+    
+    <ScrollView IsClippedToBounds="False" Padding="0">
+        <Grid RowSpacing="15" Margin="0" RowDefinitions="Auto,Auto" IsClippedToBounds="False" Padding="10">
+            <Border Style="{DynamicResource BorderWithShadowStyle}" Padding="10" Grid.Row="0">
+                <StackLayout Spacing="10" Padding="6">
+                    <Label Text="🎨 Tema de la App" 
+                           Style="{DynamicResource Headline}"/>
+                    
+                    <Border Style="{DynamicResource BorderWithShadowStyle}">
+                        <Grid BackgroundColor="{DynamicResource BackgroundColor}">
+                            
+                            <Label Text="Modo Oscuro" Margin="10,0,0,0"
+                                    Style="{DynamicResource SubHeadline}"                                       
+                                    VerticalOptions="Center"/>
+
+                            <Switch x:Name="TemaToggleSwitch"
+                                    Grid.Column="1"
+                                    IsToggled="{Binding Source={x:Reference TemaToggleSwitch}, Path=IsToggled}"
+                                    OnColor="{DynamicResource GreenPrimary}"
+                                    ThumbColor="{DynamicResource GreenSecondary}"
+                                    HorizontalOptions="End"
+                                    Toggled="OnTemaToggled"/>
+                        </Grid>
+
+                        </Border>
+                    
+                </StackLayout>
+            </Border>
+            
+            <Border Style="{DynamicResource BorderWithShadowStyle}" Padding="10" Grid.Row="1">
+                <StackLayout Spacing="15" IsClippedToBounds="False" Margin="0" Padding="6">
+                    
+                    <Label Text="⚠️ Acciones de Mantenimiento" 
+                            Style="{DynamicResource Headline}" FontSize="15"/>
+                    
+                    <Button x:Name="RestablecerEjerciciosBtn"
+                            Text="🔄 Restablecer Ejercicios por Defecto"                            
+                            Clicked="OnRestablecerEjerciciosClicked"/>
+
+                    <Button x:Name="BorrarEjerciciosBtn"
+                            Text="🗑️ Borrar Ejercicios Personalizados"                            
+                            Clicked="OnBorrarEjerciciosClicked"/>
+
+                    <Button x:Name="ResetearEntrenamientosBtn"
+                            Text="💥 Resetear Todos los Entrenamientos"                            
+                            BackgroundColor="{DynamicResource ErrorColor}"
+                            TextColor="White"
+                            Clicked="OnResetearEntrenamientosClicked"/>
+                    
+                </StackLayout>
+            </Border>
+
+        </Grid>
+    </ScrollView>
+</ContentPage>

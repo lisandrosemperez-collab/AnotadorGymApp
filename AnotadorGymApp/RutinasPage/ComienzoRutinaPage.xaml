@@ -15,21 +15,18 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ScrollView BackgroundColor="White">
-        <VerticalStackLayout Margin="8">
+    <ScrollView>
+        <VerticalStackLayout Margin="0" Padding="18">
 
-            <Grid RowDefinitions="Auto, Auto" 
-                  ColumnDefinitions="Auto, *, Auto"
-                  RowSpacing="15"
-                  ColumnSpacing="12"
-                  Padding="16"
+            <Grid RowDefinitions="Auto, Auto,Auto"
+                  ColumnDefinitions="Auto, *"
+                  RowSpacing="10"
+                  ColumnSpacing="5"
+                  Padding="0"
                   VerticalOptions="Start">
 
                 <!-- SEMANAS SECTION -->
-                <Label Text="Semana:" 
-                       TextColor="{DynamicResource PrimaryTextColor}"
-                       FontAttributes="Bold"
-                       FontSize="16"
+                <Label Text="Semana:" Style="{DynamicResource Headline}"                    
                        VerticalTextAlignment="Center"
                        VerticalOptions="Center"
                        Grid.Row="0" 
@@ -46,46 +43,36 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border Style="{StaticResource SelectedBorder}"
-                                    BackgroundColor="{DynamicResource GreenLightest}"
-                                    Stroke="{DynamicResource GreenLighter}"
-                                    StrokeThickness="1.5"
-                                    StrokeShape="RoundRectangle 12"
+                            <Border Style="{DynamicResource SelectedBorderInCollectionView}"
                                     Margin="5"
                                     Padding="16,10"
                                     HorizontalOptions="Center"
                                     VerticalOptions="Center">
+
                                 <Label Text="{Binding SemanaId}"
-                                       FontAttributes="Bold"
-                                       FontSize="14"
+                                       Style="{DynamicResource SubHeadline}"
                                        HorizontalOptions="Center"
-                                       VerticalOptions="Center"
-                                       TextColor="{DynamicResource PrimaryTextColor}" />
+                                       VerticalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Completado}" Value="True">
+                                            <Setter Property="Text" Value="{Binding SemanaId, StringFormat='{0} ✓'}"></Setter>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
                             </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
 
-                <!-- START BUTTON -->
-                <Button x:Name="IniciarButton"            
-                        HorizontalOptions="End"
-                        VerticalOptions="Center"
-                        Grid.Row="0" 
-                        Grid.Column="2"
-                        Clicked="IniciarCronometro_Clicked" 
-                        Text="Iniciar" />
 
                 <!-- DÍAS SECTION -->
-                <Label Text="Día:" 
-                       TextColor="{DynamicResource PrimaryTextColor}"
-                       FontAttributes="Bold"
-                       FontSize="16"
+                <Label Text="Día:" Style="{DynamicResource Headline}"
                        VerticalTextAlignment="Center"
                        VerticalOptions="Center"
                        Grid.Row="1" 
                        Grid.Column="0" />
 
-                <CollectionView x:Name="CollectionDias" 
+                <CollectionView x:Name="CollectionDias"
                                 SelectionChanged="CollectionDias_SelectionChanged" 
                                 SelectionMode="Single"
                                 Grid.Row="1" 
@@ -96,20 +83,22 @@
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border Style="{StaticResource SelectedBorder}" BackgroundColor="{DynamicResource GreenLightest}"
-                                    Stroke="{DynamicResource GreenLighter}"
-                                    StrokeThickness="1.5"
-                                    StrokeShape="RoundRectangle 12"
+                            <Border Style="{DynamicResource SelectedBorderInCollectionView}"
                                     Margin="5"
                                     Padding="16,10"
                                     HorizontalOptions="Center"
                                     VerticalOptions="Center">
                                 <Label Text="{Binding DiaId}"
-                                       FontAttributes="Bold"
-                                       FontSize="14"
+                                       Style="{DynamicResource SubHeadline}"
                                        HorizontalOptions="Center"
-                                       VerticalOptions="Center"
-                                       TextColor="{DynamicResource PrimaryTextColor}" />
+                                       VerticalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Completado}" Value="True">
+                                            <Setter Property="Text" Value="{Binding DiaId, StringFormat='{0} ✓'}"></Setter>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
                                 <Border.Triggers>
                                     <DataTrigger TargetType="Border" 
                                      Binding="{Binding Completado}" 
@@ -122,6 +111,15 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+                
+                <!-- START BUTTON -->
+                <Button x:Name="IniciarButton"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Start"
+                        Grid.Row="2" 
+                        Grid.Column="0" Margin="0"
+                        Clicked="IniciarCronometro_Clicked" 
+                        Text="Iniciar" />
             </Grid>
 
             <!--CONTADORES-->
@@ -137,11 +135,11 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Column="0" x:Name="lblrutina" Text="{Binding Nombre}" VerticalOptions="Center" TextColor="Black" FontAttributes="Bold"></Label>
 
-                <Label Grid.Row="1" TextColor="Black" FontAttributes="Bold"
+                <Label Grid.Row="1"
                        Text="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},Path=Tiempo,StringFormat='Total: {0}'}"></Label>
-                <Label Grid.Row="1" Grid.Column="1" TextColor="Black" FontAttributes="Bold"
+                <Label Grid.Row="1" Grid.Column="1"
                        Text="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},Path=tiempoactivo,StringFormat='Activo: {0}'}"></Label>
-                <Label Grid.Row="1" Grid.Column="2" TextColor="Black" FontAttributes="Bold"
+                <Label Grid.Row="1" Grid.Column="2"
                        Text="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},Path=tiemporest,StringFormat='Rest: {0}'}"></Label>
             </Grid>
             
@@ -152,153 +150,207 @@
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Padding="3">
+                        <Grid Padding="0" IsClippedToBounds="False">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                            </Grid.GestureRecognizers>
+                            
+                            <Border Padding="3" Style="{DynamicResource BorderWithShadowStyle}" Margin="8">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="7">
 
-                            <Grid BackgroundColor="{DynamicResource BackgroundColor}" RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
-                                                                
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
-                                </Grid.GestureRecognizers>
+                                    <Label x:Name="NombreEjercicioLabel" Text="{Binding Exercise.Name}" Margin="0,0,0,6" Grid.Row="0" HorizontalOptions="Start" Style="{DynamicResource Headline}" FontSize="13">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding Completado}" Value="True">
+                                                <Setter Property="Text" Value="{Binding Exercise.Name,StringFormat='{0} :   Completado ✓'}"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
 
-                                <Label x:Name="NombreEjercicioLabel" Text="{Binding Exercise.Name}" Margin="0,0,0,6" TextColor="Black" FontAttributes="Bold" Grid.Row="0" HorizontalOptions="Start">
-                                    <Label.Triggers>
-                                        <DataTrigger TargetType="Label" Binding="{Binding Completado}" Value="True">
-                                            <Setter Property="Text" Value="{Binding Exercise.Name,StringFormat='{0} :   Completado ✓'}"></Setter>
-                                        </DataTrigger>
-                                    </Label.Triggers>
-                                </Label>
-                                <Label Text="{Binding Volumen,StringFormat='Volumen: {0} Kilos'}" HorizontalOptions="End" Grid.Row="0"></Label>
+                                    <Label Text="{Binding Exercise.VolumenDeHoy,StringFormat='Volumen: {0} Kilos'}" 
+                                           HorizontalOptions="End" Grid.Row="1" 
+                                           FontSize="10"
+                                           Style="{DynamicResource SubHeadline}"></Label>
 
-                                <CollectionView x:Name="CvSeries" ItemsSource="{Binding SeriesObservable}" IsVisible="False" Grid.Row="1">
-                                    <CollectionView.ItemsLayout>
-                                        <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"></LinearItemsLayout>
-                                    </CollectionView.ItemsLayout>
-                                    <CollectionView.Header>
-                                        <Grid ColumnSpacing="20" BackgroundColor="Transparent" ColumnDefinitions="30,30,50,40,40,40">
-                                            
-                                            <Label Grid.Column="0" Text="Reps"></Label>
-                                            <Label Grid.Column="1" Text="Int"></Label>
-                                            <Label Grid.Column="2" Text="Rest"></Label>
-                                            <Label Grid.Column="3" Text="Kg"></Label>
-                                            <Label Grid.Column="4" Text="Reps"></Label>
-                                            <Label Grid.Column="5" Text="Inicio"></Label>
-                                        </Grid>
-                                    </CollectionView.Header>
-                                    <CollectionView.ItemTemplate>
-                                        <DataTemplate>
+                                    <Label Text="{Binding ProgresoSeriesFormateado}" 
+                                           Grid.Row="1" 
+                                           FontSize="10"
+                                           Style="{DynamicResource SubHeadline}"></Label>
 
-                                            <Grid Padding="0" IsClippedToBounds="False">
-                                                <Border Style="{StaticResource BorderWithOutShadowStyle}">
-                                                    <Grid HorizontalOptions="Start" ColumnSpacing="20" BackgroundColor="Transparent" ColumnDefinitions="30,30,50,40,40,Auto">
-                                                        <Grid.Triggers>
-                                                            <DataTrigger TargetType="Grid"  Binding="{Binding EstadoSerie}" Value="3">
-                                                                <Setter Property="BackgroundColor" Value="{DynamicResource AccentColorDark}"></Setter>
-                                                            </DataTrigger>
-                                                            <DataTrigger TargetType="Grid" Binding="{Binding EstadoSerie}" Value="4">
-                                                                <Setter Property="BackgroundColor" Value="{DynamicResource AccentColorLight}"></Setter>
-                                                            </DataTrigger>
-                                                        </Grid.Triggers>
+                                    <CollectionView x:Name="CvSeries" ItemsSource="{Binding SeriesObservable}" IsVisible="False" Grid.Row="2">
+                                        <CollectionView.ItemsLayout>
+                                            <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"></LinearItemsLayout>
+                                        </CollectionView.ItemsLayout>
 
-                                                        <Label TextColor="Black" Grid.Column="0" Grid.Row="0" FontSize="Caption" Text="{Binding Repeticiones}" VerticalOptions="Center"></Label>
-                                                        <Label TextColor="Black" Grid.Column="1" Grid.Row="0" FontSize="Caption" Text="{Binding Porcentaje1RM}" VerticalOptions="Center"></Label>
-                                                        <Label TextColor="Black" Grid.Column="2" Grid.Row="0" FontSize="Caption" Text="{Binding TempDescanso, StringFormat='{0:mm\\:ss}'}" VerticalOptions="Center"></Label>
+                                        <CollectionView.Header>
+                                            <Grid ColumnSpacing="15" 
+                                                    BackgroundColor="Transparent" 
+                                                    ColumnDefinitions="3*,2*,4*,4*,4*,4*"                                                    
+                                                    Padding="0,0,0,5">
 
-                                                        <!--ENTRY KILOS-->
-                                                        <Border Grid.Column="3" HeightRequest="20" BackgroundColor="Transparent" Style="{StaticResource SelectedBorder}">
-                                                            <Border.Triggers>
-                                                                <DataTrigger TargetType="Border" Binding="{Binding EstadoSerie}" Value="3">
-                                                                    <Setter Property="BackgroundColor" Value="{DynamicResource CardBackground}"></Setter>
-                                                                </DataTrigger>
-                                                                <DataTrigger TargetType="Border" Binding="{Binding EstadoSerie}" Value="4">
-                                                                    <Setter Property="BackgroundColor" Value="Transparent"></Setter>
-                                                                </DataTrigger>
-                                                            </Border.Triggers>
+                                                <!-- Reps Planificadas -->
+                                                <Label Grid.Column="0" 
+                                                       Text="Reps" 
+                                                       Style="{DynamicResource SubHeadline}"
+                                                       FontSize="10"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
 
-                                                            <Entry WidthRequest="32" HeightRequest="60" x:Name="EntryKg" Placeholder="---" Keyboard="Numeric" MaxLength="3"
-                                                               IsEnabled="False" IsVisible="False" FontAttributes="Bold" Text="{Binding KilosTemp,Mode=TwoWay}">
-                                                                <Entry.Triggers>
-                                                                    <DataTrigger TargetType="Entry" Binding="{Binding EstadoSerie}" Value="3">
-                                                                        <Setter Property="IsVisible" Value="True"></Setter>
-                                                                        <Setter Property="IsEnabled" Value="True"></Setter>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger TargetType="Entry" Binding="{Binding EstadoSerie}" Value="4">
-                                                                        <Setter Property="IsVisible" Value="True"></Setter>
-                                                                        <Setter Property="IsEnabled" Value="False"></Setter>
-                                                                    </DataTrigger>
-                                                                </Entry.Triggers>
-                                                            </Entry>
-                                                        </Border>
+                                                <!-- Intensidad -->
+                                                <Label Grid.Column="1" 
+                                                        Text="Int" 
+                                                        Style="{DynamicResource SubHeadline}"
+                                                       FontSize="10"
+                                                        HorizontalOptions="Center"
+                                                        VerticalOptions="Center"/>
 
-                                                        <!--ENTRY REPS-->
-                                                        <Border Grid.Column="4" HeightRequest="20" BackgroundColor="Transparent" Style="{StaticResource SelectedBorder}">
-                                                            <Border.Triggers>
-                                                                <DataTrigger TargetType="Border" Binding="{Binding EstadoSerie}" Value="3">
-                                                                    <Setter Property="BackgroundColor" Value="{DynamicResource CardBackground}"></Setter>
-                                                                </DataTrigger>
-                                                                <DataTrigger TargetType="Border" Binding="{Binding EstadoSerie}" Value="4">
-                                                                    <Setter Property="BackgroundColor" Value="Transparent"></Setter>
-                                                                </DataTrigger>
-                                                            </Border.Triggers>
-                                                            <Entry x:Name="EntryReps" Placeholder="---" IsEnabled="True" FontAttributes="Bold" WidthRequest="25" HeightRequest="60"
-                                                               IsVisible="False" Text="{Binding Repeticiones,Mode=TwoWay}" Keyboard="Numeric" MaxLength="2">
-                                                                <Entry.Triggers>
-                                                                    <DataTrigger TargetType="Entry" Binding="{Binding EstadoSerie}" Value="3">
-                                                                        <Setter Property="IsVisible" Value="True"></Setter>
-                                                                        <Setter Property="IsEnabled" Value="True"></Setter>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger TargetType="Entry"
-                                                                             Binding="{Binding EstadoSerie}"
-                                                                             Value="4">
-                                                                        <Setter Property="IsVisible" Value="True"></Setter>
-                                                                        <Setter Property="IsEnabled" Value="False"></Setter>
-                                                                    </DataTrigger>
-                                                                </Entry.Triggers>
-                                                            </Entry>
-                                                        </Border>
+                                                <!-- Descanso -->
+                                                <Label Grid.Column="2" 
+                                                       Text="Rest" 
+                                                       Style="{DynamicResource SubHeadline}"
+                                                       FontSize="10"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
 
-                                                        <!--BUTTON PLAY PAUSE COMMAND-->
-                                                        <Border Grid.Column="5" Style="{StaticResource SelectedBorder}" Padding="0">
-                                                            <Button x:Name="ClickedButton" Grid.Column="5" Padding="0" FontSize="15" WidthRequest="45" BackgroundColor="Transparent" TextColor="{DynamicResource PrimaryTextColor}"
-                                                                    Command="{Binding Source={x:Reference ThisContentPage}, Path=PlayPauseCommand}" Text="▶">
-                                                                <Button.CommandParameter>
-                                                                    <MultiBinding Converter="{StaticResource TupleConverter}">
-                                                                        <Binding Path="."></Binding>
-                                                                        <Binding Path="BindingContext" Source="{RelativeSource AncestorType={x:Type CollectionView}}"></Binding>
-                                                                        <Binding Path="Kilos"></Binding>
-                                                                        <Binding Path="Reps"></Binding>
-                                                                    </MultiBinding>
-                                                                </Button.CommandParameter>
-                                                                <Button.Triggers>
-                                                                    <DataTrigger TargetType="Button" Binding="{Binding EstadoSerie}" Value="1">
-                                                                        <Setter Property="Text" Value="▶" />
-                                                                        <!-- Play -->
-                                                                    </DataTrigger>
-                                                                    <DataTrigger TargetType="Button" Binding="{Binding EstadoSerie}" Value="2">
-                                                                        <Setter Property="Text" Value="▌▌" />
-                                                                        <Setter Property="FontSize" Value="9"></Setter>
-                                                                        <!-- Pausa -->
-                                                                    </DataTrigger>
-                                                                    <DataTrigger TargetType="Button" Binding="{Binding EstadoSerie}" Value="3">
-                                                                        <Setter Property="Text" Value="✔" />
-                                                                        <!-- Palomita -->
-                                                                    </DataTrigger>
-                                                                    <DataTrigger TargetType="Button" Binding="{Binding EstadoSerie}" Value="4">
-                                                                        <Setter Property="Text" Value="✏" />
-                                                                        <!-- Editar -->
-                                                                    </DataTrigger>
-                                                                </Button.Triggers>
-                                                            </Button>
-                                                        </Border>
-                                                    </Grid>
-                                                </Border>
+                                                <!-- Kilos -->
+                                                <Label Grid.Column="3" 
+                                                        Text="Kg" 
+                                                        Style="{DynamicResource SubHeadline}"
+                                                        FontSize="10"
+                                                        HorizontalOptions="Center"
+                                                        VerticalOptions="Center"/>
+
+                                                <!-- Reps Realizadas -->
+                                                <Label Grid.Column="4" 
+                                                       Text="Reps" 
+                                                       Style="{DynamicResource SubHeadline}"
+                                                       FontSize="10"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center"/>
+
+                                                <!-- Inicio/Control -->
+                                                <Label Grid.Column="5" 
+                                                        Text="Inicio" 
+                                                        Style="{DynamicResource SubHeadline}"
+                                                        FontSize="10"
+                                                        HorizontalOptions="Center"
+                                                        VerticalOptions="Center"/>
                                             </Grid>
-                                        </DataTemplate>
-                                    </CollectionView.ItemTemplate>
-                                </CollectionView>
-                                
-                                <Button x:Name="AñadirSerieButton" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Text="Añadir Serie" Padding="0" Clicked="AñadirSerie_Clicked" IsVisible="False"></Button>
-                            </Grid>
-                        </Border>
+                                        </CollectionView.Header>
+
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+
+                                                <Grid HorizontalOptions="Fill" ColumnSpacing="15" BackgroundColor="Transparent" ColumnDefinitions="3*,2*,4*,4*,4*,4*">
+                                                    <Grid.Triggers>
+                                                        <DataTrigger TargetType="Grid"  Binding="{Binding EstadoSerie}" Value="3">
+                                                            <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceColor}"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Grid" Binding="{Binding EstadoSerie}" Value="4">
+                                                            <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceColor}"></Setter>
+                                                        </DataTrigger>
+                                                    </Grid.Triggers>
+
+                                                    <Label Grid.Column="0" Grid.Row="0" FontSize="Caption" Text="{Binding Repeticiones}" VerticalOptions="Center"></Label>
+                                                    <Label Grid.Column="1" Grid.Row="0" FontSize="Caption" Text="{Binding Porcentaje1RM}" VerticalOptions="Center"></Label>
+                                                    <Label Grid.Column="2" Grid.Row="0" FontSize="Caption" Text="{Binding TempDescanso, StringFormat='{0:mm\\:ss}'}" VerticalOptions="Center"></Label>
+
+                                                    <!--ENTRY KILOS-->
+                                                    <Border Grid.Column="3" HeightRequest="20" BackgroundColor="Transparent" Style="{StaticResource SelectedBorder}">
+                                                        <Border.Triggers>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding EstadoSerie}" Value="3">
+                                                                <Setter Property="BackgroundColor" Value="{DynamicResource CardBackground}"></Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding EstadoSerie}" Value="4">
+                                                                <Setter Property="BackgroundColor" Value="Transparent"></Setter>
+                                                            </DataTrigger>
+                                                        </Border.Triggers>
+
+                                                        <Entry WidthRequest="32" HeightRequest="60" x:Name="EntryKg" Placeholder="---" Keyboard="Numeric" MaxLength="3"
+                                                                   IsEnabled="False" IsVisible="False" FontAttributes="Bold" Text="{Binding KilosTemp,Mode=TwoWay}">
+                                                            <Entry.Triggers>
+                                                                <DataTrigger TargetType="Entry" Binding="{Binding EstadoSerie}" Value="3">
+                                                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                                                    <Setter Property="IsEnabled" Value="True"></Setter>
+                                                                </DataTrigger>
+                                                                <DataTrigger TargetType="Entry" Binding="{Binding EstadoSerie}" Value="4">
+                                                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                                </DataTrigger>
+                                                            </Entry.Triggers>
+                                                        </Entry>
+                                                    </Border>
+
+                                                    <!--ENTRY REPS-->
+                                                    <Border Grid.Column="4" HeightRequest="20" BackgroundColor="Transparent" Style="{StaticResource SelectedBorder}">
+                                                        <Border.Triggers>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding EstadoSerie}" Value="3">
+                                                                <Setter Property="BackgroundColor" Value="{DynamicResource CardBackground}"></Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding EstadoSerie}" Value="4">
+                                                                <Setter Property="BackgroundColor" Value="Transparent"></Setter>
+                                                            </DataTrigger>
+                                                        </Border.Triggers>
+                                                        <Entry x:Name="EntryReps" Placeholder="---" IsEnabled="True" FontAttributes="Bold" WidthRequest="25" HeightRequest="60"
+                                                                   IsVisible="False" Text="{Binding Repeticiones,Mode=TwoWay}" Keyboard="Numeric" MaxLength="2">
+                                                            <Entry.Triggers>
+                                                                <DataTrigger TargetType="Entry" Binding="{Binding EstadoSerie}" Value="3">
+                                                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                                                    <Setter Property="IsEnabled" Value="True"></Setter>
+                                                                </DataTrigger>
+                                                                <DataTrigger TargetType="Entry"
+                                                                                 Binding="{Binding EstadoSerie}"
+                                                                                 Value="4">
+                                                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                                </DataTrigger>
+                                                            </Entry.Triggers>
+                                                        </Entry>
+                                                    </Border>
+
+                                                    <!--BUTTON PLAY PAUSE COMMAND-->
+                                                    <Border Grid.Column="5" Style="{StaticResource SelectedBorder}" Padding="0" Margin="0">
+                                                        <Button x:Name="ClickedButton" Grid.Column="5" Padding="0" FontSize="15" WidthRequest="45" BackgroundColor="Transparent" TextColor="{DynamicResource PrimaryTextColor}"
+                                                                        Command="{Binding Source={x:Reference ThisContentPage}, Path=PlayPauseCommand}" Text="▶">
+                                                            <Button.CommandParameter>
+                                                                <MultiBinding Converter="{StaticResource TupleConverter}">
+                                                                    <Binding Path="."></Binding>
+                                                                    <Binding Path="BindingContext" Source="{RelativeSource AncestorType={x:Type CollectionView}}"></Binding>
+                                                                    <Binding Path="Kilos"></Binding>
+                                                                    <Binding Path="Reps"></Binding>
+                                                                </MultiBinding>
+                                                            </Button.CommandParameter>
+                                                            <Button.Triggers>
+                                                                <DataTrigger TargetType="Button" Binding="{Binding EstadoSerie}" Value="1">
+                                                                    <Setter Property="Text" Value="▶" />
+                                                                    <!-- Play -->
+                                                                </DataTrigger>
+                                                                <DataTrigger TargetType="Button" Binding="{Binding EstadoSerie}" Value="2">
+                                                                    <Setter Property="Text" Value="▌▌" />
+                                                                    <Setter Property="FontSize" Value="9"></Setter>
+                                                                    <!-- Pausa -->
+                                                                </DataTrigger>
+                                                                <DataTrigger TargetType="Button" Binding="{Binding EstadoSerie}" Value="3">
+                                                                    <Setter Property="Text" Value="✔" />
+                                                                    <!-- Palomita -->
+                                                                </DataTrigger>
+                                                                <DataTrigger TargetType="Button" Binding="{Binding EstadoSerie}" Value="4">
+                                                                    <Setter Property="Text" Value="✏" />
+                                                                    <!-- Editar -->
+                                                                </DataTrigger>
+                                                            </Button.Triggers>
+                                                        </Button>
+                                                    </Border>
+                                                </Grid>
+
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+
+                                    <Button x:Name="AñadirSerieButton" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" Text="Añadir Serie" Padding="0" Clicked="AñadirSerie_Clicked" IsVisible="False" HeightRequest="35"></Button>
+                                </Grid>
+                            </Border>
+
+                        </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>

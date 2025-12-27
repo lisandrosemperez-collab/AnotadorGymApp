@@ -11,6 +11,8 @@ using AnotadorGymApp.RutinasPage;
 using AnotadorGymApp.MainPageViews;
 using AnotadorGymApp.MetricasPageViews;
 using AnotadorGymApp.Data;
+using AnotadorGymApp.ConfiguracionPage;
+using AnotadorGymApp.Services;
 
 namespace AnotadorGymApp
 {
@@ -34,13 +36,10 @@ namespace AnotadorGymApp
                 .UseMicrocharts()
                 .UseMauiCommunityToolkit()
                 .Services
-                .AddSingleton<DataService>()
-                .AddSingleton<MainPage>()
-                .AddSingleton<PrincipalRutinasPage>()
-                .AddSingleton<ComienzoRutinaPage>()
-                .AddSingleton<AgregarRutinaPage>()
-                .AddSingleton<MetricasPage>()
-                .AddSingleton<SplashPage>();
+                .AddSingleton<DataService>()                                                
+                .AddSingleton<ConfigPage>()    
+                .AddSingleton<ImagenPersistenteService>()
+                .AddSingleton<ConfigService>();
             
             builder.Services.AddDbContext<DataBase>(
                 options =>

@@ -34,7 +34,7 @@ namespace AnotadorGymApp.Data.Migrations
 
             modelBuilder.Entity("AnotadorGymApp.Data.Exercise", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ExerciseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -57,7 +57,7 @@ namespace AnotadorGymApp.Data.Migrations
                     b.Property<int>("primaryMuscleId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("Id");
+                    b.HasKey("ExerciseId");
 
                     b.HasIndex("bodyPartId");
 
@@ -104,16 +104,14 @@ namespace AnotadorGymApp.Data.Migrations
 
             modelBuilder.Entity("AnotadorGymApp.Data.RutinaDia", b =>
                 {
-                    b.Property<int>("RutinaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SemanaId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("DiaId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("Completado")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DiaIdUI")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("NombreRutinaDia")
@@ -124,23 +122,20 @@ namespace AnotadorGymApp.Data.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("RutinaId", "SemanaId", "DiaId");
+                    b.Property<int>("SemanaId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("DiaId");
+
+                    b.HasIndex("SemanaId");
 
                     b.ToTable("RutinaDias");
                 });
 
             modelBuilder.Entity("AnotadorGymApp.Data.RutinaEjercicio", b =>
                 {
-                    b.Property<int>("RutinaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SemanaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DiaId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("EjercicioId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<bool>("Completado")
@@ -148,10 +143,15 @@ namespace AnotadorGymApp.Data.Migrations
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
 
+                    b.Property<int>("DiaId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("ExerciseId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("RutinaId", "SemanaId", "DiaId", "EjercicioId");
+                    b.HasKey("EjercicioId");
+
+                    b.HasIndex("DiaId");
 
                     b.HasIndex("ExerciseId");
 
@@ -160,45 +160,41 @@ namespace AnotadorGymApp.Data.Migrations
 
             modelBuilder.Entity("AnotadorGymApp.Data.RutinaSemana", b =>
                 {
-                    b.Property<int>("RutinaId")
+                    b.Property<int>("SemanaId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("SemanaId")
+                    b.Property<bool>("Completado")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("NombreSemana")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("RutinasRutinaId")
+                    b.Property<int>("RutinaId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("RutinaId", "SemanaId");
+                    b.Property<int?>("SemanaIdUI")
+                        .HasColumnType("INTEGER");
 
-                    b.HasIndex("RutinasRutinaId");
+                    b.HasKey("SemanaId");
+
+                    b.HasIndex("RutinaId");
 
                     b.ToTable("RutinaSemanas");
                 });
 
             modelBuilder.Entity("AnotadorGymApp.Data.RutinaSeries", b =>
                 {
-                    b.Property<int>("RutinaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SemanaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DiaId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("EjercicioId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RutinaSeriesId")
+                    b.Property<int>("SerieId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Descanso")
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("EjercicioId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("EstadoSerie")
                         .HasColumnType("INTEGER");
@@ -212,7 +208,9 @@ namespace AnotadorGymApp.Data.Migrations
                     b.Property<int>("Tipo")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("RutinaId", "SemanaId", "DiaId", "EjercicioId", "RutinaSeriesId");
+                    b.HasKey("SerieId");
+
+                    b.HasIndex("EjercicioId");
 
                     b.ToTable("RutinaSeries");
                 });
@@ -226,7 +224,16 @@ namespace AnotadorGymApp.Data.Migrations
                     b.Property<bool>("Activa")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("Completado")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Descripcion")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Dificultad")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FrecuenciaPorGrupo")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageSource")
@@ -234,6 +241,9 @@ namespace AnotadorGymApp.Data.Migrations
 
                     b.Property<string>("Nombre")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TiempoPorSesion")
                         .HasColumnType("TEXT");
 
                     b.HasKey("RutinaId");
@@ -288,13 +298,13 @@ namespace AnotadorGymApp.Data.Migrations
 
             modelBuilder.Entity("ExerciseMuscle", b =>
                 {
-                    b.Property<int>("ExercisesAsSecundaryId")
+                    b.Property<int>("ExercisesAsSecundaryExerciseId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("secondaryMusclesMuscleId")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ExercisesAsSecundaryId", "secondaryMusclesMuscleId");
+                    b.HasKey("ExercisesAsSecundaryExerciseId", "secondaryMusclesMuscleId");
 
                     b.HasIndex("secondaryMusclesMuscleId");
 
@@ -343,7 +353,7 @@ namespace AnotadorGymApp.Data.Migrations
                 {
                     b.HasOne("AnotadorGymApp.Data.RutinaSemana", "Semana")
                         .WithMany("Dias")
-                        .HasForeignKey("RutinaId", "SemanaId")
+                        .HasForeignKey("SemanaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -352,15 +362,15 @@ namespace AnotadorGymApp.Data.Migrations
 
             modelBuilder.Entity("AnotadorGymApp.Data.RutinaEjercicio", b =>
                 {
-                    b.HasOne("AnotadorGymApp.Data.Exercise", "Exercise")
-                        .WithMany("RutinasEjercicios")
-                        .HasForeignKey("ExerciseId")
+                    b.HasOne("AnotadorGymApp.Data.RutinaDia", "Dia")
+                        .WithMany("Ejercicios")
+                        .HasForeignKey("DiaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AnotadorGymApp.Data.RutinaDia", "Dia")
-                        .WithMany("Ejercicios")
-                        .HasForeignKey("RutinaId", "SemanaId", "DiaId")
+                    b.HasOne("AnotadorGymApp.Data.Exercise", "Exercise")
+                        .WithMany("RutinasEjercicios")
+                        .HasForeignKey("ExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -377,10 +387,6 @@ namespace AnotadorGymApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AnotadorGymApp.Data.Rutinas", null)
-                        .WithMany("SemanasObservable")
-                        .HasForeignKey("RutinasRutinaId");
-
                     b.Navigation("Rutina");
                 });
 
@@ -388,7 +394,7 @@ namespace AnotadorGymApp.Data.Migrations
                 {
                     b.HasOne("AnotadorGymApp.Data.RutinaEjercicio", "Ejercicio")
                         .WithMany("Series")
-                        .HasForeignKey("RutinaId", "SemanaId", "DiaId", "EjercicioId")
+                        .HasForeignKey("EjercicioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -410,7 +416,7 @@ namespace AnotadorGymApp.Data.Migrations
                 {
                     b.HasOne("AnotadorGymApp.Data.Exercise", null)
                         .WithMany()
-                        .HasForeignKey("ExercisesAsSecundaryId")
+                        .HasForeignKey("ExercisesAsSecundaryExerciseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -461,8 +467,6 @@ namespace AnotadorGymApp.Data.Migrations
             modelBuilder.Entity("AnotadorGymApp.Data.Rutinas", b =>
                 {
                     b.Navigation("Semanas");
-
-                    b.Navigation("SemanasObservable");
                 });
 
             modelBuilder.Entity("AnotadorGymApp.Data.WorkoutDay", b =>

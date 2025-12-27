@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"          
+             xmlns:data="clr-namespace:AnotadorGymApp.Data;assembly=AnotadorGymApp.Data"
+             xmlns:local="clr-namespace:AnotadorGymApp.RutinasPage"
+             x:Name="ThisPage"
+             x:Class="AnotadorGymApp.RutinasPage.AgregarRutinaPage"
+             Shell.NavBarIsVisible="False"
+             Shell.TabBarIsVisible="False">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:IntToTimeSpanConverter x:Key="IntToTimeSpanConverter" />
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="10" Padding="10">
+            <!-- TÍTULO PRINCIPAL -->
+            <Label Text="🏗️ Crear Nueva Rutina"
+                   FontSize="18" FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="{DynamicResource GreenDarkest}"
+                   Margin="0,0,0,10"/>
+
+            <!-- CAMPO NOMBRE RUTINA -->
+            <Border Style="{StaticResource BorderWithShadowStyle}"
+                    Padding="20"
+                    Margin="0,0,0,15">
+
+                <StackLayout>
+                    <Label Text="📝 Nombre de la Rutina"
+                           FontSize="14" FontAttributes="Bold"
+                           TextColor="{DynamicResource GreenDarkest}"
+                           Margin="0,0,0,8"/>
+
+                    <Entry x:Name="NombreRutinaEntry" 
+                           Placeholder="Ej: Rutina Fuerza 5x5, Volumen Hipertrofia..."
+                           FontSize="14"
+                           TextColor="{DynamicResource PrimaryTextColor}"
+                           PlaceholderColor="{DynamicResource DisabledTextColor}"
+                           BackgroundColor="Transparent"                                                      
+                           Text="{Binding RutinaActual.Nombre,Mode=TwoWay}"/>
+                </StackLayout>
+            </Border>
+
+            <!-- CAMPO DESCRIPCIÓN RUTINA -->
+            <Border Style="{StaticResource BorderWithShadowStyle}"
+                    Padding="20"
+                    Margin="0,0,0,15">
+
+                <StackLayout>
+                    <Label Text="📋 Descripción de la Rutina"
+                           FontSize="14" FontAttributes="Bold"
+                           TextColor="{DynamicResource GreenDarkest}"
+                           Margin="0,0,0,8"/>
+
+                    <Editor x:Name="DescripcionRutinaEntry" 
+                            Placeholder="Ej: Rutina de hipertrofia con frecuencia 2, enfoque en ejercicios compuestos..."
+                            FontSize="14"
+                            TextColor="{DynamicResource PrimaryTextColor}"
+                            PlaceholderColor="{DynamicResource DisabledTextColor}"
+                            BackgroundColor="Transparent"
+                            AutoSize="TextChanges"
+                            Text="{Binding RutinaActual.Descripcion,Mode=TwoWay}"/>
+                </StackLayout>
+            </Border>
+
+            <!-- SELECTOR DE IMAGEN RUTINA -->
+            <Border Style="{StaticResource BorderWithShadowStyle}"
+                    Padding="20"
+                    Margin="0,0,0,15">
+
+                <Grid ColumnDefinitions="*, Auto" 
+                      ColumnSpacing="15"
+                      VerticalOptions="Center">
+
+                    <!-- TÍTULO Y BOTÓN A LA IZQUIERDA -->
+                    <StackLayout Grid.Column="0" VerticalOptions="Center">
+                        <Label Text="🖼️ Imagen de la Rutina"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{DynamicResource GreenDarkest}"
+                               Margin="0,0,0,2"/>
+
+                        <Label Text="Seleccionar imagen..."
+                               FontSize="12"
+                               TextColor="{DynamicResource GreenDarker}"
+                               TextDecorations="Underline"
+                               HorizontalOptions="Start">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="AgregarImagenButton_Clicked"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+
+                    <!-- IMAGEN A LA DERECHA -->
+                    <Border Grid.Column="1"
+                            Stroke="{DynamicResource GreenDarker}"
+                            StrokeThickness="2"
+                            StrokeShape="RoundRectangle 8"
+                            HeightRequest="80"
+                            WidthRequest="80"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center">
+
+                        <Image Source="{Binding RutinaActual.ImageSource}"
+                               Aspect="AspectFill"
+                               HeightRequest="76"
+                               WidthRequest="76"/>
+
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- SELECTOR DE SEMANAS -->
+            <Border Style="{StaticResource BorderWithShadowStyle}"
+                    Padding="20">
+                <Grid RowDefinitions="Auto, Auto,Auto" RowSpacing="10">
+                    
+                    <!-- TÍTULO Y DESCRIPCIÓN -->
+                    <StackLayout Grid.Row="0" Grid.ColumnSpan="2">
+                        <Label Text="📅 Duración de la Rutina"
+                               FontSize="14" FontAttributes="Bold"
+                               TextColor="{DynamicResource GreenDarkest}"/>
+                    </StackLayout>
+
+                    <!-- PICKER ESTILIZADO -->
+                    <Border Grid.Row="1" Grid.Column="1" 
+                            Style="{DynamicResource BorderWithOutShadowStyle}"
+                            Padding="15,10">
+
+                        <Grid ColumnDefinitions="*,Auto,Auto" Padding="0">
+                            <Label Text="Selecciona cuántas semanas tendrá tu rutina" Grid.Column="0"
+                                   FontSize="12"
+                                   TextColor="{DynamicResource SecondaryTextColor}"/>   
+                            <Picker x:Name="SemanaPicker"
+                                    Grid.Column="1"
+                                    ItemsSource="{Binding OpcionesSemanas}"
+                                    SelectedItem="{Binding SemanaIndexSeleccionado,Mode=TwoWay}"
+                                    FontSize="14"
+                                    TextColor="{DynamicResource GreenDark}"
+                                    BackgroundColor="Transparent"
+                                    WidthRequest="40"/>
+
+                            <!-- ÍCONO PERSONALIZADO -->
+                            <Label Grid.Column="2"
+                                   Text="⌄"
+                                   FontSize="16"
+                                   TextColor="{DynamicResource GreenMedium}"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"
+                                   Margin="0"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- INDICADOR VISUAL -->
+                    <StackLayout Grid.Row="2"
+                                 Orientation="Horizontal" 
+                                 Spacing="5">
+                        <BoxView HeightRequest="3"
+                                 WidthRequest="20"
+                                 BackgroundColor="{DynamicResource GreenMedium}"
+                                 CornerRadius="2"
+                                 VerticalOptions="Center"/>     
+
+                        <Label Text="{Binding Source={x:Reference SemanaPicker}, Path=SelectedItem, StringFormat='{0} semanas programadas'}"
+                                FontSize="12"
+                                TextColor="{DynamicResource SecondaryTextColor}"
+                                VerticalOptions="Center"/>
+                    </StackLayout>
+                </Grid>
+            </Border>
+
+            <CollectionView x:Name="SemanasCollectionView" ItemsSource="{Binding RutinaActual.SemanasObservable,Mode=TwoWay}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Padding="10" Spacing="5">
+                            <!-- Cabecera: ID + botón mostrar/ocultar -->
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="40">
+                                <Label Text="{Binding SemanaIdUI,StringFormat='Semana: {0}'}"                                                                              
+                                       VerticalOptions="Center"
+                                       Grid.Column="0" />
+
+                                <Button Text="Mostrar" Clicked="AlternarExpandido_Clicked"                                                                        
+                                        Grid.Column="1"
+                                        VerticalOptions="Center"/>
+                            </Grid>
+
+                            <StackLayout IsVisible="{Binding Seleccionado}">
+                                <!-- Aquí iría el contenido de la semana, por ejemplo los días -->                                
+                                <CollectionView x:Name="DiasCollectionView" ItemsSource="{Binding DiasObservable}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="15,10" Margin="0,0,0,10" Style="{DynamicResource BorderWithOutShadowStyle}" BackgroundColor="Transparent" StrokeThickness="3">
+                                                <VerticalStackLayout>
+                                                    <Grid ColumnDefinitions="Auto, *, Auto"
+                                                          RowDefinitions="Auto"
+                                                          ColumnSpacing="15"
+                                                          VerticalOptions="Center">
+
+                                                        <!-- BADGE DEL DÍA -->
+                                                        <Border Grid.Column="0"
+                                                                BackgroundColor="{DynamicResource GreenMedium}"
+                                                                Stroke="Transparent"
+                                                                StrokeThickness="0"
+                                                                StrokeShape="RoundRectangle 20"
+                                                                Padding="12,8"
+                                                                VerticalOptions="Center">
+
+                                                            <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                                                <Label Text="📅"
+                                                                        FontSize="12"
+                                                                        
+                                                                        VerticalOptions="Center"/>
+                                                                <Label Text="{Binding DiaIdUI}"
+                                                                       FontSize="12"
+                                                                       FontAttributes="Bold"
+                                                                       
+                                                                       VerticalOptions="Center"/>
+                                                            </HorizontalStackLayout>
+                                                        </Border>
+
+                                                        <!-- ENTRADA DEL NOMBRE -->
+                                                        <Entry x:Name="NombreDiaEntry" 
+                                                                   Text="{Binding NombreRutinaDia}" 
+                                                                   Placeholder="Ej: Lunes - Pecho, Martes - Pierna..."
+                                                                   PlaceholderColor="{DynamicResource SecondaryTextColor}"
+                                                                   TextColor="{DynamicResource PrimaryTextColor}"
+                                                                   FontSize="14"
+                                                                   BackgroundColor="Transparent"
+                                                                   ClearButtonVisibility="WhileEditing"
+                                                                   Grid.Column="1"
+                                                                   VerticalOptions="Center"
+                                                                   TextChanged="NombreDiaEntry_TextChanged"/>
+
+                                                        <!-- BOTÓN ELIMINAR -->
+                                                        <Button Grid.Column="2"
+                                                                Style="{x:StaticResource DeleteButtonStyle}"
+                                                                CommandParameter="Dia" 
+                                                                Clicked="EliminarElemento_Clicked" 
+                                                                VerticalOptions="Center"
+                                                                HeightRequest="35"
+                                                                WidthRequest="35"/>
+
+                                                    </Grid>
+
+                                                    <CollectionView x:Name="EjerciciosCollectionView" ItemsSource="{Binding EjerciciosObservable}" Margin="0">
+                                                        <CollectionView.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <VerticalStackLayout Padding="0" Margin="0" Spacing="0">
+                                                                    <Grid ColumnDefinitions="Auto,*" HorizontalOptions="Fill" VerticalOptions="Start">
+                                                                        <Label Text="{Binding Exercise.Name,Mode=TwoWay}"
+                                                                                LineBreakMode="WordWrap"
+                                                                                VerticalOptions="Center" 
+                                                                                VerticalTextAlignment="Center"
+                                                                                Style="{DynamicResource SubHeadline}" 
+                                                                                Grid.Column="0" WidthRequest="250"/>
+                                                                        <Button Style="{x:StaticResource DeleteButtonStyle}" 
+                                                                                Grid.Column="1"
+                                                                                CommandParameter="Ejercicio" 
+                                                                                Clicked="EliminarElemento_Clicked" 
+                                                                                HorizontalOptions="Start" 
+                                                                                VerticalOptions="Center"/>
+                                                                    </Grid>
+                                                                    <CollectionView ItemsSource="{Binding SeriesObservable}">
+                                                                        <CollectionView.ItemTemplate>
+                                                                            <DataTemplate>
+
+                                                                                <Grid RowSpacing="0" RowDefinitions="Auto,Auto,Auto,Auto,10" ColumnDefinitions="*,*">
+
+                                                                                    <HorizontalStackLayout Grid.Row="0" Grid.ColumnSpan="2" HeightRequest="30" Spacing="7">
+                                                                                        <Label Text="Serie " Style="{DynamicResource SubHeadline}" VerticalOptions="Center" />
+                                                                                        <Label Text="{Binding SerieIdUI}" Style="{DynamicResource SubHeadline}" VerticalOptions="Center"/>
+                                                                                        <Button Style="{x:StaticResource DeleteButtonStyle}" BorderWidth="1"
+                                                                                                CommandParameter="Serie" Clicked="EliminarElemento_Clicked" HorizontalOptions="End" VerticalOptions="Center"/>
+                                                                                    </HorizontalStackLayout>
+
+                                                                                    <HorizontalStackLayout Grid.Row="1" Spacing="5" Grid.Column="0" IsVisible="True">
+                                                                                        <HorizontalStackLayout.Triggers>
+                                                                                            <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding Tipo}" Value="{x:Static data:TipoSerie.Max_Rm}">
+                                                                                                <Setter Property="IsVisible" Value="False"></Setter>
+                                                                                            </DataTrigger>
+                                                                                        </HorizontalStackLayout.Triggers>
+                                                                                        <Label Text="Reps:" VerticalOptions="Center"/>
+                                                                                        <Entry Text="{Binding Repeticiones,Mode=TwoWay}" Keyboard="Numeric" Visual="Material" PlaceholderColor="Transparent" MaxLength="2" VerticalOptions="Center"/>
+                                                                                    </HorizontalStackLayout>
+
+                                                                                    <HorizontalStackLayout Grid.Row="1" Spacing="5" Grid.Column="1" IsVisible="True">
+                                                                                        <HorizontalStackLayout.Triggers>
+                                                                                            <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding Tipo}" Value="{x:Static data:TipoSerie.Max_Rm}">
+                                                                                                <Setter Property="IsVisible" Value="False"></Setter>
+                                                                                            </DataTrigger>
+                                                                                        </HorizontalStackLayout.Triggers>
+                                                                                        <Label Text="Carga (%):" VerticalOptions="Center"/>
+                                                                                        <Entry Text="{Binding Porcentaje1RM,Mode=TwoWay}" WidthRequest="30" Keyboard="Numeric" Visual="None" MaxLength="2"/>
+                                                                                    </HorizontalStackLayout>
+
+                                                                                    <HorizontalStackLayout Grid.Row="2" Spacing="2" Grid.Column="0">
+                                                                                        <HorizontalStackLayout.Triggers>
+                                                                                            <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding Tipo}" Value="{x:Static data:TipoSerie.Max_Rm}">
+                                                                                                <Setter Property="IsVisible" Value="False"></Setter>
+                                                                                            </DataTrigger>
+                                                                                            <DataTrigger TargetType="HorizontalStackLayout" Binding="{Binding Tipo}" Value="{x:Static data:TipoSerie.DropSet}">
+                                                                                                <Setter Property="IsVisible" Value="False" />
+                                                                                            </DataTrigger>
+                                                                                        </HorizontalStackLayout.Triggers>
+                                                                                        <Label Text="Descanso (S): " VerticalOptions="Center"/>
+                                                                                        
+                                                                                        <Picker Title="Segundos..."                                                                                                 
+                                                                                                ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},Path=OpcionesSegundos}"                                                                                                
+                                                                                                SelectedItem="{Binding Descanso}"
+                                                                                                ItemDisplayBinding="{Binding ., Converter={StaticResource IntToTimeSpanConverter}}"                                                                                                
+                                                                                                VerticalOptions="End"/>
+                                                                                    </HorizontalStackLayout>
+
+                                                                                    <HorizontalStackLayout Grid.Row="3" Spacing="5" Grid.Column="0">
+                                                                                        <Label Text="Tipo Serie: " VerticalOptions="Center"/>
+                                                                                        <Picker Title="Tipo Serie" ItemsSource="{Binding Source={x:Reference ThisPage},Path=BindingContext.TipoSerieEnum}" SelectedItem="{Binding Tipo,Mode=TwoWay}"/>
+                                                                                    </HorizontalStackLayout>
+                                                                                    <Border Grid.Row="4" Grid.ColumnSpan="2" Stroke="{DynamicResource AccentColorDark}" StrokeThickness="2" HeightRequest="2" VerticalOptions="End" HorizontalOptions="Fill" />
+
+                                                                            </Grid>
+                                                                                
+                                                                            </DataTemplate>
+                                                                        </CollectionView.ItemTemplate>
+                                                                    </CollectionView>
+
+                                                                    <Button Text="Agregar Serie" CommandParameter="Serie" Clicked="AgregarElemento_Clicked" WidthRequest="160"
+                                                                            HeightRequest="40" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,6"></Button>
+                                                                </VerticalStackLayout>
+
+                                                            </DataTemplate>
+                                                        </CollectionView.ItemTemplate>
+                                                    </CollectionView>
+                                                    <Button x:Name="AgregarEjercicioButton" Text="Agregar Ejercicio" Clicked="AgregarElemento_Clicked" CommandParameter="Ejercicio" Margin="0,10"/>
+
+                                                    
+                                                </VerticalStackLayout>
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                                <Button x:Name="AgregarDiaButton" Text="Agregar Día" Clicked="AgregarElemento_Clicked" CommandParameter="Dia" />
+                            </StackLayout>
+                            
+                            <BoxView HeightRequest="1" Margin="0,5"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+            <Button x:Name="GuardarRutinaButton" Text="Guardar Rutina" Clicked="GuardarRutinaButton_Clicked" VerticalOptions="End"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

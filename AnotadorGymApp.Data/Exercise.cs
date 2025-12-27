@@ -42,16 +42,16 @@ namespace AnotadorGymApp.Data
 
         private string name;
 
-        private int id;
-        public int Id
+        private int exerciseId;
+        public int ExerciseId
         {
-            get { return id; }
+            get { return exerciseId; }
             set
             {
-                if (id != value)
+                if (exerciseId != value)
                 {
-                    id = value;
-                    OnPropertyChanged(nameof(Id));
+                    exerciseId = value;
+                    OnPropertyChanged(nameof(ExerciseId));
                 }
             } 
         }        
@@ -106,6 +106,13 @@ namespace AnotadorGymApp.Data
                 }
             }
         }
+        #endregion
+
+        #region UI
+        [NotMapped]
+        public double? MejorPeso => ExerciseLogs?.Select(log => log.PesoMaximo).DefaultIfEmpty(0).Max() ?? 0;
+        [NotMapped]
+        public double? VolumenDeHoy => ExerciseLogs?.FirstOrDefault(log => log.WorkoutDay.Date == DateTime.Now.Date)?.VolumenTotal ?? 0;        
         private async Task GuardarCambiosAsync()
         {
             try
@@ -118,12 +125,13 @@ namespace AnotadorGymApp.Data
             }
         }
 
+        #endregion
+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
     }
     public class WorkoutDay : INotifyPropertyChanged
     {

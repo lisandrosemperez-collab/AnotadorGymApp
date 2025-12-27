@@ -1,40 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="AnotadorGymApp.Resources.Styles.DarkTheme">
 
-    <!-- Paleta base -->
-    <Color x:Key="PrimaryColor">#3C6E71</Color>
-    <!-- Verde azulado (igual que claro) -->
-    <Color x:Key="SecondaryColor">#D9D9D9</Color>
-    <!-- Gris claro para contraste -->
-    <Color x:Key="BackgroundColor">#121212</Color>
-    <!-- Fondo oscuro principal -->
-    <Color x:Key="CardBackground">#1E1E1E</Color>
-    <!-- Fondo tarjetas -->
-    <Color x:Key="SurfaceColor">#2A2A2A</Color>
-    <!-- Fondos secundarios -->
+    <Color x:Key="GreenPrimary">#7AB09F</Color>
+    <Color x:Key="GreenSecondary">#486A5F</Color>
 
-    <!-- Texto -->
-    <Color x:Key="PrimaryTextColor">#FFFFFF</Color>
-    <!-- Texto principal -->
-    <Color x:Key="SecondaryTextColor">#CCCCCC</Color>
-    <!-- Texto secundario -->
-    <Color x:Key="DisabledTextColor">#666666</Color>
+    <!-- FONDOS -->
+    <Color x:Key="BackgroundColor">#2D4038</Color>
+    <Color x:Key="CardBackground">#3A544B</Color>
+    <Color x:Key="SurfaceColor">#486A5F</Color>
+    <Color x:Key="SurfaceColorTransparent">#80759D94</Color>
 
-    <!-- Botones y acentos -->
-    <Color x:Key="AccentColor">#2A4E50</Color>
+    <!-- TEXTO -->
+    <Color x:Key="PrimaryTextColor">#E8F5F0</Color>
+    <Color x:Key="SecondaryTextColor">#A5EBD4</Color>
+    <Color x:Key="DisabledTextColor">#6B7A75</Color>
+    
+    <!-- Éxito claro: fondo suave -->
+    <Color x:Key="ErrorColor">#EF5350</Color>
+    <!-- Error: Rojo más vibrante para oscuro -->
+    <Color x:Key="WarningColor">#FFA726</Color>
+    <!-- Advertencia: Naranja más vibrante -->
+    <Color x:Key="InfoColor">#29B6F6</Color>
+    <!-- Info: Azul más vibrante -->
 
-    <!-- Éxito, error, advertencia -->
-    <Color x:Key="SuccessColor">#81C784</Color>
-    <Color x:Key="ErrorColor">#EF9A9A</Color>
-    <Color x:Key="WarningColor">#FFB74D</Color>
-    <Color x:Key="InfoColor">#64B5F6</Color>
+    <!-- BORDES Y DIVISORES -->
+    <Color x:Key="BorderColor">#486A5F</Color>
+    <Color x:Key="DividerColor">#39554C</Color>
 
-    <!-- Bordes y separadores -->
-    <Color x:Key="BorderColor">#444444</Color>
-    <Color x:Key="DividerColor">#333333</Color>
-
-    <!-- Sombras -->
-    <Color x:Key="ShadowColor">#000000</Color>
+    <!-- SOMBRAS -->
+    <Color x:Key="ShadowColor">#7AB09F</Color>
 
 </ResourceDictionary>

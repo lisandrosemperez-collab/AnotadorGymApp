@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="AnotadorGymApp.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"    
+    Title="Ejercicios"
+    Shell.NavBarIsVisible="True">
+
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="*, Auto" Padding="10" BackgroundColor="{DynamicResource GreenLightest}">
+            <Label Text="🏋️ Mi Entrenamiento" 
+                   VerticalOptions="Center"
+                   Style="{DynamicResource Headline}"
+                   FontSize="20" FontAttributes="Bold"/>
+
+            <Button x:Name="ConfigButton" Padding="0"
+                    Grid.Column="1"
+                    Text="⚙️" 
+                    Clicked="OnConfigClicked"
+                    BackgroundColor="Transparent"
+                    TextColor="{DynamicResource PrimaryTextColor}"
+                    FontSize="18"
+                    WidthRequest="44"
+                    HeightRequest="44"
+                    CornerRadius="22"
+                    BorderColor="{DynamicResource GreenPrimary}"
+                    BorderWidth="1"/>
+        </Grid>
+    </Shell.TitleView>
+
+    <ScrollView Padding="0">
+        <Grid RowSpacing="10" Margin="0" RowDefinitions="Auto,Auto,Auto,Auto,Auto" IsClippedToBounds="False" Padding="10">
+
+            <Button x:Name="IniciarRutinaButton" Grid.Row="0"
+                    Text="Comenzar nueva rutina"                    
+                    IsVisible="True"
+                    Clicked="IniciarRutinaButton_Clicked"/>
+
+            <!--RUTINA ACTIVA-->
+            <Border x:Name="RutinaActivaContenedor" Grid.Row="1" 
+                    Style="{DynamicResource BorderWithShadowStyle}" 
+                    IsVisible="False"
+                    Padding="20"
+                    BackgroundColor="{DynamicResource CardBackground}">
+
+                <Grid RowDefinitions="Auto, Auto, Auto, Auto" 
+                      ColumnDefinitions="*, Auto"
+                      RowSpacing="12"
+                      ColumnSpacing="15"
+                      BackgroundColor="Transparent"
+                      BindingContext="{Binding RutinaActiva}">
+
+                    <!-- TÍTULO Y NOMBRE RUTINA -->
+                    <Label Text="🏋️ Rutina Actual:" 
+                           Grid.Row="0" Grid.Column="0"
+                           Style="{DynamicResource Headline}"
+                           VerticalOptions="Center"/>
+
+                    <Label x:Name="NombreRutinaLabel" 
+                            Grid.Row="0" Grid.Column="1"
+                            FontSize="16" FontAttributes="Bold"
+                            TextColor="{DynamicResource GreenMedium}"
+                           Text="{Binding Nombre}"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End"/>
+
+                    <!-- DÍAS COMPLETADOS -->
+                    <StackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                 Orientation="Horizontal" Spacing="8"
+                                 VerticalOptions="Center">
+                        <Label Text="📅"
+                               FontSize="14"
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding CountDiasCompletados, StringFormat='Días Completados: {0}'}" x:Name="DiasCompletadosLabel"
+                               FontSize="14"
+                               TextColor="{DynamicResource SecondaryTextColor}"
+                               VerticalOptions="Center"/>
+                    </StackLayout>
+
+                    <!-- PROGRESO (BARRA) -->
+                    <StackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Spacing="5">
+                        <Grid ColumnDefinitions="*, Auto" BackgroundColor="Transparent">
+                            <Label Text="Progreso:"
+                                   Grid.Column="0"
+                                   FontSize="13"
+                                   TextColor="{DynamicResource SecondaryTextColor}"/>
+                            <Label Text="{Binding ProgresoRutina, StringFormat='{0:P0}'}"
+                                   Grid.Column="1"
+                                   FontSize="13" FontAttributes="Bold"
+                                    TextColor="{DynamicResource GreenMedium}"/>
+                        </Grid>
+                        <ProgressBar Progress="{Binding ProgresoRutina}"
+                                    ProgressColor="{DynamicResource GreenMedium}"
+                                    BackgroundColor="{DynamicResource GreenLightest}"
+                                    HeightRequest="8"/>
+                    </StackLayout>
+
+                    <!-- BOTÓN CONTINUAR -->
+                    <Button Text="➡️ Continuar Rutina" 
+                            Clicked="ContinuarRutinaButton_Clicked" 
+                            Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                            Style="{DynamicResource PrimaryButtonStyle}"
+                            HeightRequest="45"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            CornerRadius="10"/>
+
+                </Grid>
+            </Border>
+
+            <!--SIN RUTINA ACTIVA-->
+            <Border x:Name="SinRutinaContenedor" Grid.Row="1" 
+                    Style="{DynamicResource BorderWithShadowStyle}" 
+                    IsVisible="False"
+                    Padding="15">
+
+                <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="20" IsClippedToBounds="False" Padding="10">
+                    <!-- ICONO -->
+                    <Label Text="🏋️‍♂️" Grid.Row="0"
+                               FontSize="40"
+                               HorizontalOptions="Center"/>
+
+                    <!-- MENSAJE -->
+                    <Label Text="No tienes rutina activa" Grid.Row="1"
+                                Style="{DynamicResource Headline}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"/>
+
+                    <Label Text="¡Es el momento perfecto para empezar!" Grid.Row="2"
+                                Style="{DynamicResource Headline}"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"/>
+
+                    <!-- BOTÓN CREAR RUTINA -->
+                    <Button Text="➕ Crear Mi Primera Rutina" Grid.Row="3"
+                                    Clicked="IniciarRutinaButton_Clicked"                            
+                                    HeightRequest="50"                                    
+                                    FontAttributes="Bold"
+                                    CornerRadius="12"
+                                    HorizontalOptions="Fill"/>
+                </Grid>
+
+            </Border>
+
+            <!--RESUMEN SEMANAL-->
+            <Border Grid.Row="4" Style="{DynamicResource BorderWithShadowStyle}" Margin="0,10,0,0" BackgroundColor="{DynamicResource CardBackground}">
+                <Grid BindingContext="{Binding ResumenSemanal}" x:Name="ResumenSemanalGrid" IsVisible="False" Padding="15">
+
+                    <!-- TÍTULO SEMANAL -->
+                    <Label Text="Resumen Semanal" 
+                           FontSize="16" FontAttributes="Bold" 
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,10"/>
+
+                    <!-- RANGO DE FECHAS -->
+                    <Label Text="{Binding RangoSemanasDisplay}"
+                            FontSize="12" TextColor="Gray"
+                            HorizontalOptions="Center"
+                            Margin="0,20,0,0"/>
+
+                    <!-- RESUMEN SEMANAL EN 4 COLUMNAS -->
+                    <Grid ColumnDefinitions="*, *, *, *" RowDefinitions="Auto, Auto"
+                            VerticalOptions="Center" Margin="0,40,0,0">
+
+                        <!-- DÍAS ENTRENADOS -->
+                        <StackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="Center">
+                            <Label Text="{Binding DiasEntrenados}" 
+                                        FontSize="16" FontAttributes="Bold" 
+                                        HorizontalOptions="Center"/>
+                            <Label Text="Días" FontSize="11" 
+                                    HorizontalOptions="Center" TextColor="Gray"/>
+                        </StackLayout>
+
+                        <!-- VOLUMEN SEMANAL -->
+                        <StackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="Center">
+                            <Label Text="{Binding VolumenTotal, StringFormat='{0:F0}'}" 
+                                    FontSize="16" FontAttributes="Bold" 
+                                    HorizontalOptions="Center"/>
+                            <Label Text="Volumen" FontSize="11" 
+                                    HorizontalOptions="Center" TextColor="Gray"/>
+                        </StackLayout>
+
+                        <!-- EJERCICIOS SEMANALES -->
+                        <StackLayout Grid.Row="1" Grid.Column="2" HorizontalOptions="Center">
+                            <Label Text="{Binding EjerciciosTotal}" 
+                                   FontSize="16" FontAttributes="Bold" 
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Ejercicios" FontSize="11" 
+                                    HorizontalOptions="Center" TextColor="Gray"/>
+                        </StackLayout>
+
+                        <!-- SERIES SEMANALES -->
+                        <StackLayout Grid.Row="1" Grid.Column="3" HorizontalOptions="Center">
+                            <Label Text="{Binding SeriesTotal}" 
+                                   FontSize="16" FontAttributes="Bold" 
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Series" FontSize="11" 
+                                    HorizontalOptions="Center" TextColor="Gray"/>
+                        </StackLayout>
+
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- SIN DATOS SEMANALES -->
+            <Border Grid.Row="4" Style="{DynamicResource BorderWithShadowStyle}" 
+                    Margin="0,10,0,0"                     
+                    x:Name="SinDatosSemanalesContenedor"
+                    IsVisible="False">
+
+                <HorizontalStackLayout Spacing="12" Padding="15" VerticalOptions="Center" BackgroundColor="Transparent">
+                    <Label Text="📈" FontSize="16" VerticalOptions="Center"/>
+
+                    <VerticalStackLayout Spacing="2" BackgroundColor="Transparent">
+                        <Label Text="Sin actividad esta semana" 
+                               Style="{DynamicResource Headline}"></Label>
+                        <Label Text="0 entrenamientos registrados" 
+                               Style="{DynamicResource SubHeadline}"></Label>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!--RESUMEN DEL DIA-->
+            <Border Grid.Row="2" Style="{DynamicResource BorderWithShadowStyle}" x:Name="WorkutDayBorder" IsVisible="False">
+                <Grid BindingContext="{Binding WorkoutDay}" x:Name="WorkutDayGrid" IsVisible="True" Padding="15" RowDefinitions="Auto,Auto">
+                    <!-- TÍTULO RESUMEN -->
+                    <Label Text="Resumen del Día" Grid.Row="0"
+                            FontSize="16" FontAttributes="Bold" 
+                            HorizontalOptions="Center"
+                            Margin="0,0,0,10"/>
+                    <!-- RESUMEN EN 3 COLUMNAS -->
+                    <Grid ColumnDefinitions="*, *, *" RowDefinitions="Auto" Grid.Row="1">
+
+                        <!-- VOLUMEN TOTAL -->
+                        <StackLayout Grid.Column="0" HorizontalOptions="Center">
+                            <Label Text="{Binding VolumenTotal, StringFormat='{0:F0}'}" 
+                       FontSize="18" FontAttributes="Bold" 
+                       HorizontalOptions="Center"/>
+                            <Label Text="Volumen" FontSize="12" 
+                       HorizontalOptions="Center" TextColor="Gray"/>
+                        </StackLayout>
+
+                        <!-- EJERCICIOS TOTAL -->
+                        <StackLayout Grid.Column="1" HorizontalOptions="Center">
+                            <Label Text="{Binding ExerciseLogs.Count}" 
+                       FontSize="18" FontAttributes="Bold" 
+                       HorizontalOptions="Center"/>
+                            <Label Text="Ejercicios" FontSize="12" 
+                       HorizontalOptions="Center" TextColor="Gray"/>
+                        </StackLayout>
+
+                        <!-- SERIES TOTAL -->
+                        <StackLayout Grid.Column="2" HorizontalOptions="Center">
+                            <Label Text="{Binding SeriesTotal}" 
+                       FontSize="18" FontAttributes="Bold" 
+                       HorizontalOptions="Center"/>
+                            <Label Text="Series" FontSize="12" 
+                       HorizontalOptions="Center" TextColor="Gray"/>
+                        </StackLayout>
+
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!--RESUMEN DE EJERCICIOS-->
+            <Border Grid.Row="3" Style="{DynamicResource BorderWithShadowStyle}" Margin="0,10,0,0" x:Name="ExerciseLogBorder">
+                <CollectionView x:Name="ExerciseLogCollectionView" 
+                    ItemsSource="{Binding WorkoutDay.ExerciseLogs}"
+                    SelectionMode="None">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="10,5" Padding="15" Style="{DynamicResource BorderWithOutShadowStyle}" StrokeShape="8" StrokeThickness="0">
+
+                                <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto, Auto">
+
+                                    <!-- NOMBRE EJERCICIO -->
+                                    <Label Grid.Row="0" Grid.Column="0" 
+                               Text="{Binding Exercise.Name}" 
+                               FontSize="14" FontAttributes="Bold"/>
+
+                                    <!-- SERIES TOTAL -->
+                                    <Label Grid.Row="0" Grid.Column="1" 
+                               Text="{Binding TotalSeries, StringFormat='{0} series'}"
+                               FontSize="13" TextColor="Gray"/>
+
+                                    <!-- PESO MÁXIMO -->
+                                    <Label Grid.Row="1" Grid.Column="0" 
+                               Text="{Binding PesoMaximo, StringFormat='Máximo: {0:F1} kg'}"
+                               FontSize="13" Margin="0,5,0,0"/>
+
+                                    <!-- VOLUMEN TOTAL -->
+                                    <Label Grid.Row="1" Grid.Column="1" 
+                               Text="{Binding VolumenTotal, StringFormat='volumen: {0:F0} kg'}"
+                               FontSize="13" FontAttributes="Bold"
+                               Margin="0,5,0,0"/>
+
+                                    <!-- LÍNEA SEPARADORA -->
+                                    <BoxView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                               HeightRequest="1" BackgroundColor="LightGray"
+                               Margin="0,10,0,0"/>
+
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+
+        </Grid>
+    </ScrollView>
+</ContentPage>

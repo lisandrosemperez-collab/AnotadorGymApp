@@ -1,68 +1,105 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:Rutinas="clr-namespace:AnotadorGymApp.Datos"
+             xmlns:Rutinas="clr-namespace:AnotadorGymApp.Data;assembly=AnotadorGymApp.Data"
              x:Class="AnotadorGymApp.RutinasPage.PrincipalRutinasPage"
+             xmlns:local="clr-namespace:AnotadorGymApp.RutinasPage"
              Shell.NavBarIsVisible="False"
              Title="Rutinas">
-
-
-    <ScrollView Padding="10" Margin="0">
-        <Grid>
+            
+    <ScrollView Padding="0" Margin="0" IsClippedToBounds="False">
+        <Grid IsClippedToBounds="False" RowSpacing="10" Padding="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Button x:Name="AñadirRutinaButton" Margin="0,0,0,10" Padding="0" Grid.Row="0"
-                    Text="➕ Agregar Rutina"
-                    FontSize="14"
+            <Button x:Name="AñadirRutinaButton" Margin="10" Padding="0" Grid.Row="0"
+                    Text="➕ Agregar Rutina"                    
                     HeightRequest="50"
                     IsVisible="True"
                     Clicked="AñadirRutinaButton_Clicked"/>
-            
-            <CollectionView ItemsSource="{Binding rutinas}" HorizontalOptions="Center" BackgroundColor="Transparent" Grid.Row="1">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout ItemSpacing="10" Orientation="Vertical"></LinearItemsLayout>
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid IsClippedToBounds="False">
-                            <Border Style="{DynamicResource BorderWithShadowStyle}" Margin="0">
-                            <Grid BackgroundColor="{DynamicResource CardBackground}" Margin="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="40" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
 
-                                <Label Text="{Binding Nombre}" FontAttributes="Bold" Style="{StaticResource SubHeadline}"
-                                        Grid.Row="0" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Start" />
-                                <Button Text="✏️" FontSize="14" Margin="10,0" Grid.Row="0" Grid.Column="1" HorizontalOptions="End"                                       
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},Path=EditRutinaCommand}" CommandParameter="{Binding .}" Padding="0" />
-                                <Button Text="🗑️" FontSize="14"
-                                        Grid.Row="0" Grid.Column="2" HorizontalOptions="End" Clicked="EliminarRutina_Clicked" Padding="0" />
-                                <Label Text="{Binding CountDiasPrimeraSemana, StringFormat='Días: {0}'}" Grid.Row="1" Grid.ColumnSpan="3" Style="{StaticResource SubHeadline}"/>
-                                <Label Text="{Binding Semanas.Count, StringFormat='Semanas: {0}'}" Grid.Row="1" Style="{StaticResource SubHeadline}" HorizontalOptions="Start"/>
-                                <Label Text="{Binding Descripcion}" Grid.Row="2" Grid.ColumnSpan="3" Style="{StaticResource SubHeadline}" LineBreakMode="WordWrap" HorizontalOptions="Center"/>
-                                <Button Text="Empezar Rutina" Grid.Row="2" Grid.ColumnSpan="3" Margin="0,8,0,0"
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=StarRutinaCommand}"
-                                    CommandParameter="{Binding .}"></Button>
-                            </Grid>
-                        </Border>
-                            
-                        </Grid>
-                    </DataTemplate>
+            <CollectionView ItemsSource="{Binding rutinas}" HorizontalOptions="Center" Margin="0" Grid.Row="1">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="0" Orientation="Vertical"></LinearItemsLayout>
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <local:SeleccionPlantilla>
+                        <local:SeleccionPlantilla.ConImagenTemplate>
+                            <DataTemplate>
+                                <Grid RowDefinitions="*" IsClippedToBounds="False" Padding="10">
+                                    <Border Style="{DynamicResource BorderWithShadowStyle}">
+                                        <Grid BackgroundColor="Transparent" Margin="0" RowSpacing="20" Padding="10"
+                                            RowDefinitions="40,Auto,Auto,Auto" ColumnDefinitions="*,*,Auto">
+                                            <Image Source="{Binding ImageSource}" Grid.RowSpan="4" Grid.ColumnSpan="3" 
+                                                    Aspect="AspectFill" 
+                                                    Opacity="0.9"
+                                                    Margin="-10"/>
+
+                                            <!-- NOMBRE RUTINA -->
+                                            <Label Text="{Binding Nombre}" 
+                                                    Grid.Row="0" Grid.ColumnSpan="2"
+                                                    FontSize="16" FontAttributes="Bold" MaxLines="1"
+                                                    TextColor="White"
+                                                    VerticalOptions="Center"/>
+
+                                            <Button Text="✏️" FontSize="14" Margin="10,0" Grid.Row="0" Grid.Column="1" HorizontalOptions="End" BackgroundColor="Transparent" TextColor="White"                                      
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},Path=EditRutinaCommand}" CommandParameter="{Binding .}" Padding="0" />
+
+                                            <Button Text="🗑️" FontSize="14" BackgroundColor="Transparent" TextColor="White" 
+                                                    Grid.Row="0" Grid.Column="2" HorizontalOptions="End" Clicked="EliminarRutina_Clicked" Padding="0" />
+
+                                            <Label Text="{Binding CountDiasPrimeraSemana, StringFormat='Días: {0}'}" Grid.Row="1" Grid.Column="1" TextColor="White"/>
+                                            <Label Text="{Binding Semanas.Count, StringFormat='Semanas: {0}'}" Grid.Row="1" Grid.Column="0" TextColor="White" HorizontalOptions="Start"/>
+                                            <Label Text="{Binding Descripcion}" Grid.Row="2" Grid.ColumnSpan="3" TextColor="White" LineBreakMode="WordWrap" HorizontalOptions="Center"/>
+
+                                            <Button Text="🎯 Empezar Rutina" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,8,0,0" BackgroundColor="{DynamicResource SurfaceColorTransparent}"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=StarRutinaCommand}"
+                                                    CommandParameter="{Binding .}"></Button>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </local:SeleccionPlantilla.ConImagenTemplate>
+
+                        <local:SeleccionPlantilla.SinImagenTemplate>
+                            <DataTemplate>
+                                <Grid Margin="10" RowDefinitions="Auto">
+                                    <Border Style="{DynamicResource BorderWithShadowStyle}" Stroke="{DynamicResource GreenDarker}">
+                                        <Grid Margin="0" RowSpacing="8" Padding="10"
+                                            RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto" BackgroundColor="{DynamicResource GreenDarker}">
+
+                                            <!-- NOMBRE RUTINA -->
+                                            <Label Text="{Binding Nombre}" Style="{DynamicResource Headline}"
+                                                    Grid.Row="0" Grid.Column="0"
+                                                    VerticalOptions="Center"/>
+
+                                            <Button Text="✏️" FontSize="18" Margin="10,0" Grid.Row="0" Grid.Column="1" HorizontalOptions="End" TextColor="White" BackgroundColor="Transparent"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},Path=EditRutinaCommand}" CommandParameter="{Binding .}" Padding="0" />
+
+                                            <Button Text="🗑️" FontSize="18" TextColor="White" BackgroundColor="Transparent"
+                                                    Grid.Row="0" Grid.Column="2" HorizontalOptions="End" Clicked="EliminarRutina_Clicked" Padding="0" />
+
+                                            <Label Text="{Binding CountDiasPrimeraSemana, StringFormat='Días: {0}'}" Grid.Row="1" Grid.Column="1" Style="{DynamicResource SubHeadline}"/>
+                                            <Label Text="{Binding Semanas.Count, StringFormat='Semanas: {0}'}" Grid.Row="1" Grid.Column="0" HorizontalOptions="Start" Style="{DynamicResource SubHeadline}"/>
+                                            <Label Text="{Binding Descripcion}" Grid.Row="2" Grid.ColumnSpan="3" LineBreakMode="WordWrap" HorizontalOptions="Center" Style="{DynamicResource SubHeadline}"/>
+
+                                            <Button Text="🎯 Empezar Rutina" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,8,0,0"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=StarRutinaCommand}"
+                                                    CommandParameter="{Binding .}">
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </local:SeleccionPlantilla.SinImagenTemplate>
+                    </local:SeleccionPlantilla>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
     </ScrollView>
-
-
+            
 </ContentPage>
