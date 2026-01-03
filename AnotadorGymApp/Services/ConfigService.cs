@@ -50,32 +50,73 @@ namespace AnotadorGymApp.Services
                     mergedDictionaries.Add(new LightTheme());
                 }
             }
-        }
+        }        
         public async Task CargarExercisesInicialesAsync(DataService _dataService)
-        {            
+        {
             try
-            {                
+            {
                 if (!_dataService._database.Exercises.Any())
                 {
                     #region JsonABaseDeDatos
 
-                    using var stream = await FileSystem.OpenAppPackageFileAsync("Ejercicios.json");
-                    using var reader = new StreamReader(stream);
-                    string json = await reader.ReadToEndAsync().ConfigureAwait(false);
-                    Debug.WriteLine("📦 Contenido del archivo JSON:");
-                    Debug.WriteLine(json);
+                    List<ExerciseJson> datos = null;
+                    string origenDatos = "";
 
-                    if (string.IsNullOrWhiteSpace(json))
+                    // INTENTO 1: Archivo de PRODUCCIÓN (Ejercicios.json)
+                    try
                     {
-                        Console.WriteLine("⚠️ El archivo está vacío");
+                        using var stream = await FileSystem.OpenAppPackageFileAsync("Ejercicios.json");
+                        using var reader = new StreamReader(stream);
+                        string json = await reader.ReadToEndAsync().ConfigureAwait(false);
+
+                        if (!string.IsNullOrWhiteSpace(json))
+                        {
+                            datos = JsonSerializer.Deserialize<List<ExerciseJson>>(json);
+                            origenDatos = "producción (Ejercicios.json)";
+                            Debug.WriteLine($"✅ Encontrado archivo de PRODUCCIÓN: {datos?.Count ?? 0} ejercicios");
+                        }
+                    }
+                    catch (Exception exProd)
+                    {
+                        Debug.WriteLine($"⚠️ No se pudo cargar Ejercicios.json: {exProd.Message}");
+                    }
+
+                    // INTENTO 2: Archivo de EJEMPLO (si falló el de producción)
+                    if (datos == null || datos.Count == 0)
+                    {
+                        try
+                        {                            
+                            using var streamEjemplo = await FileSystem.OpenAppPackageFileAsync("EjerciciosEJEMPLO.json");
+                            using var readerEjemplo = new StreamReader(streamEjemplo);
+                            string jsonEjemplo = await readerEjemplo.ReadToEndAsync().ConfigureAwait(false);
+
+                            if (!string.IsNullOrWhiteSpace(jsonEjemplo))
+                            {
+                                datos = JsonSerializer.Deserialize<List<ExerciseJson>>(jsonEjemplo);
+                                origenDatos = "ejemplo (Ejercicios_EJEMPLO.json)";
+                                Debug.WriteLine($"⚠️ Usando archivo de EJEMPLO: {datos?.Count ?? 0} ejercicios");
+                                Debug.WriteLine("💡 Para la versión completa, asegúrate de incluir Ejercicios.json en la app");
+                            }
+                        }
+                        catch (Exception exEjemplo)
+                        {
+                            Debug.WriteLine($"❌ No se pudo cargar Ejercicios_EJEMPLO.json: {exEjemplo.Message}");
+                        }
+                    }                    
+
+                    // PROCESAR LOS DATOS
+                    if (datos != null && datos.Count > 0)
+                    {
+                        Console.WriteLine($"✅ Se cargaron {datos.Count} ejercicios desde {origenDatos}");
+                        Console.WriteLine("📊 Iniciando migración de datos Json a DB");
+                        await _dataService.IniciarDatosExercises(datos);
+                        Preferences.Set("PrimerArranque", false);
+                        Debug.WriteLine("✅ Datos iniciales cargados correctamente");
                     }
                     else
                     {
-                        var datos = JsonSerializer.Deserialize<List<ExerciseJson>>(json);
-                        Console.WriteLine($"✅ Se cargaron {datos?.Count ?? 0} ejercicios, Iniciando Migrar Datos Json a DB");
-                        await _dataService.IniciarDatosExercises(datos);
-                        Preferences.Set("PrimerArranque", false);
-                        Debug.WriteLine("✅ Datos iniciales cargados");
+                        Debug.WriteLine("❌ ERROR: No se pudieron cargar datos de ejercicios");
+                        throw new InvalidOperationException("No hay datos de ejercicios disponibles");
                     }
 
                     #endregion
@@ -83,9 +124,8 @@ namespace AnotadorGymApp.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error al aplicar migración: {ex.Message}");
+                Debug.WriteLine($"❌ Error al aplicar migración: {ex.Message}");                
             }
-            
         }
         public async Task CargarRutinasInicialesAsync(DataService _dataService,ImagenPersistenteService imagenPersistenteService)
         {            

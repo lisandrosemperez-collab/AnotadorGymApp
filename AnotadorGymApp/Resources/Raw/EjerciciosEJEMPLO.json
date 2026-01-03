@@ -1,0 +1,350 @@
+[
+  {
+    "Name": "Curl de Bíceps con Barra Recta",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Barra Z",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Barra en Banco Scott",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Barra en Banco Predicador",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Barra Invertido (Supinación)",
+    "primaryMuscle": {
+      "Name": "Braquiorradial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Bíceps Braquial"
+      },
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Extensores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Barra 21's",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps Alternado con Mancuernas",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps Simultáneo con Mancuernas",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Mancuernas en Banco Inclinado",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Deltoides Anterior"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Mancuerna en Banco Scott",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Mancuernas en Banco Predicador",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Mancuerna a Una Mano",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Mancuernas Sentado",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Mancuernas de Pie",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      },
+      {
+        "Name": "Core"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Mancuerna en Concentración",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Mancuernas en Banco Inclinado Prono",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps con Mancuernas en Ángulo 90°",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps en Polea Alta con Barra Recta",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },
+  {
+    "Name": "Curl de Bíceps en Polea Alta con Barra Z",
+    "primaryMuscle": {
+      "Name": "Bíceps Braquial"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Braquial"
+      },
+      {
+        "Name": "Braquiorradial"
+      },
+      {
+        "Name": "Flexores de la muñeca"
+      }
+    ],
+    "bodyPart": "Brazos"
+  },  
+  {
+    "Name": "Battle Ropes con Movimiento de Piernas",
+    "primaryMuscle": {
+      "Name": "Core"
+    },
+    "secondaryMuscles": [
+      {
+        "Name": "Cuádriceps"
+      },
+      {
+        "Name": "Glúteos"
+      },
+      {
+        "Name": "Deltoides Anterior"
+      },
+      {
+        "Name": "Deltoides Lateral"
+      },
+      {
+        "Name": "Trapecio"
+      }
+    ],
+    "bodyPart": "Full Body"
+  }
+]

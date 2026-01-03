@@ -50,6 +50,6 @@ Backup/
 *.db-shm
 *.db-wal
 
-# Database files - NO incluir datos de usuario
+# Database files
 AnotadorGymApp/Resources/Raw/WorkoutDays.json
 AnotadorGymApp/Resources/Raw/Ejercicios.json

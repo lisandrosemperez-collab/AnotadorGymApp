@@ -123,13 +123,7 @@
 	<ItemGroup>
 	  <MauiAsset Update="Resources\Images\RutinasImages\dc_training_3x4_doggcrapp.jpg">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </MauiAsset>
-	  <MauiAsset Update="Resources\Raw\Ejercicios.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </MauiAsset>
-	  <MauiAsset Update="Resources\Raw\WorkoutDays.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </MauiAsset>
+	  </MauiAsset>	  
 	</ItemGroup>		
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionAnotadorGymAppHideInfoBar="True" /></VisualStudio></ProjectExtensions>
