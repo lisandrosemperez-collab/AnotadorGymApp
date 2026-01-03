@@ -22,13 +22,32 @@ Una aplicación móvil nativa y multiplataforma para el seguimiento profesional 
 | :---: | :---: | :---: | :---: |
 | <img src="https://raw.githubusercontent.com/lisandrosemperez-collab/AnotadorGymApp/master/screenshots/Rutines.jpeg" width="250"> | <img src="https://raw.githubusercontent.com/lisandrosemperez-collab/AnotadorGymApp/master/screenshots/ChartsViews.jpeg" width="250" > | <img src="https://raw.githubusercontent.com/lisandrosemperez-collab/AnotadorGymApp/master/screenshots/ChartsViews1.jpeg" width="250" > | <img src="https://raw.githubusercontent.com/lisandrosemperez-collab/AnotadorGymApp/master/screenshots/Config.jpeg" width="250"> |
 
+## 🏗️ **Arquitectura del Proyecto**
+
+La aplicación sigue el patrón **Model-View-ViewModel (MVVM)** y está organizada en una estructura modular centrada en páginas y funcionalidades, lo que facilita la navegación y el mantenimiento del código.
+
+```csharp
+AnotadorGymApp/ # App MAUI (Presentación)
+├── Pages/ # Vistas organizadas por funcionalidad
+├── Services/ # Servicios de aplicación
+└── Resources/ # Estilos, temas, assets
+
+AnotadorGymApp.Data/ # Librería de Datos (Dominio y Persistencia)
+├── DataService.cs # Repositorio principal
+├── Entities/ # Modelo de dominio (Rutinas, Exercise...)
+└── DataBase.cs # Contexto DbContext de EF Core
+```
+> **💡 Para un análisis arquitectónico detallado**, visita la [sección correspondiente en mi perfil de desarrollador](https://github.com/lisandrosemperez-collab#arquitectura-del-proyecto).
+
 ## ✨ Características Principales
 
 ### 🏗️ Arquitectura y Diseño
-- **Arquitectura MVVM** con separación clara de responsabilidades
-- **Inyección de dependencias** manual para servicios principales
-- **Patrón Repository** implementado en `DataService`
-- **Navegación con Shell** para experiencia fluida entre páginas
+La aplicación implementa una **arquitectura limpia y modular**, separando físicamente la **capa de presentación** (.NET MAUI) de la **capa de dominio y datos** en una librería independiente (`AnotadorGymApp.Data`).
+- **Patrón MVVM** con separación clara de responsabilidades.
+- **Patrón Repository** centralizado en el `DataService`.
+- **Inyección de Dependencias** manual para servicios.
+- **Persistencia con Entity Framework Core 8** (Code-First, Migraciones automáticas).
+- **Separación en dos proyectos** para una dependencia unidireccional y limpia.
 
 ### 💾 Persistencia de Datos
 - **SQLite** con **Entity Framework Core** para almacenamiento local
@@ -120,10 +139,12 @@ public App(DataService dataService, ConfigService configService,
 - [ ] **CI/CD pipeline** para builds automáticos
 - [ ] **Internacionalización** (español/inglés/portugués)
 
-## ✉️ Contacto y Soporte
-**Desarrollador:** [Lisandro Semperez](https://github.com/lisandrosemperez-collab)
+## ✉️ Soporte y Contacto
 
-- **Reportar un problema**: [Issues](https://github.com/lisandrosemperez-collab/AnotadorGymApp/issues)
-- **Solicitar una funcionalidad**: [Discussions](https://github.com/lisandrosemperez-collab/AnotadorGymApp/discussions)
+Este proyecto es mantenido activamente por **Lisandro Semperez**.
 
-⭐ **Si este proyecto te resulta útil, ¡considera darle una estrella en GitHub!**
+- **📫 Contacto profesional**: [LinkedIn](https://www.linkedin.com/in/lisandro-semperez-24b1782b8/) | [Email](mailto:lisandrosemperez@gmail.com)
+- **🐛 Reportar un problema**: [Abrir un Issue](https://github.com/lisandrosemperez-collab/AnotadorGymApp/issues)
+- **💡 Sugerir una funcionalidad**: [Iniciar una Discusión](https://github.com/lisandrosemperez-collab/AnotadorGymApp/discussions)
+
+⭐ **Si este proyecto te resulta útil o interesante, ¡considera darle una estrella en GitHub!**
