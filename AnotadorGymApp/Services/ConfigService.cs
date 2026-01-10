@@ -51,7 +51,7 @@ namespace AnotadorGymApp.Services
                 }
             }
         }        
-        public async Task CargarExercisesInicialesAsync(DataService _dataService)
+        public async Task CargarExercisesInicialesAsync(DataService _dataService,IProgress<double>? progress = null)
         {
             try
             {
@@ -61,56 +61,62 @@ namespace AnotadorGymApp.Services
 
                     List<ExerciseJson> datos = null;
                     string origenDatos = "";
+                    bool usarDatosDemo = Preferences.Get("UsarDatosDemo", false);
 
-                    // INTENTO 1: Archivo de PRODUCCIÓN (Ejercicios.json)
-                    try
+                    string[] archivosPrioridad;
+
+                    if (usarDatosDemo)
                     {
-                        using var stream = await FileSystem.OpenAppPackageFileAsync("Ejercicios.json");
-                        using var reader = new StreamReader(stream);
-                        string json = await reader.ReadToEndAsync().ConfigureAwait(false);
-
-                        if (!string.IsNullOrWhiteSpace(json))
-                        {
-                            datos = JsonSerializer.Deserialize<List<ExerciseJson>>(json);
-                            origenDatos = "producción (Ejercicios.json)";
-                            Debug.WriteLine($"✅ Encontrado archivo de PRODUCCIÓN: {datos?.Count ?? 0} ejercicios");
-                        }
+                        archivosPrioridad = new[] { "EjerciciosEJEMPLO.json", "Ejercicios.json" };
+                        Debug.WriteLine("🔍 Priorizando archivo DEMO por preferencia");
                     }
-                    catch (Exception exProd)
+                    else
                     {
-                        Debug.WriteLine($"⚠️ No se pudo cargar Ejercicios.json: {exProd.Message}");
+                        archivosPrioridad = new[] { "Ejercicios.json", "EjerciciosEJEMPLO.json" };
+                        Debug.WriteLine("🔍 Priorizando archivo PRODUCCIÓN por preferencia");
                     }
 
-                    // INTENTO 2: Archivo de EJEMPLO (si falló el de producción)
-                    if (datos == null || datos.Count == 0)
+                    foreach (var archivo in archivosPrioridad)
                     {
                         try
-                        {                            
-                            using var streamEjemplo = await FileSystem.OpenAppPackageFileAsync("EjerciciosEJEMPLO.json");
-                            using var readerEjemplo = new StreamReader(streamEjemplo);
-                            string jsonEjemplo = await readerEjemplo.ReadToEndAsync().ConfigureAwait(false);
+                        {
+                            Debug.WriteLine($"📦 Intentando cargar: {archivo}");
 
-                            if (!string.IsNullOrWhiteSpace(jsonEjemplo))
+                            using var stream = await FileSystem.OpenAppPackageFileAsync(archivo);
+                            using var reader = new StreamReader(stream);
+                            string json = await reader.ReadToEndAsync().ConfigureAwait(false);
+                            if (!string.IsNullOrWhiteSpace(json))
                             {
-                                datos = JsonSerializer.Deserialize<List<ExerciseJson>>(jsonEjemplo);
-                                origenDatos = "ejemplo (Ejercicios_EJEMPLO.json)";
-                                Debug.WriteLine($"⚠️ Usando archivo de EJEMPLO: {datos?.Count ?? 0} ejercicios");
-                                Debug.WriteLine("💡 Para la versión completa, asegúrate de incluir Ejercicios.json en la app");
+                                datos = JsonSerializer.Deserialize<List<ExerciseJson>>(json);
+
+                                if (datos != null && datos.Count > 0)
+                                {
+                                    origenDatos = archivo.Contains("EJEMPLO") ?
+                                        "demo (EjerciciosEJEMPLO.json)" :
+                                        "producción (Ejercicios.json)";
+
+                                    usarDatosDemo = archivo.Contains("EJEMPLO");
+                                    Debug.WriteLine($"✅ Cargado desde {origenDatos}: {datos.Count} ejercicios");
+                                    break;
+                                }
                             }
                         }
-                        catch (Exception exEjemplo)
+                        catch (Exception ex)
                         {
-                            Debug.WriteLine($"❌ No se pudo cargar Ejercicios_EJEMPLO.json: {exEjemplo.Message}");
+                            Debug.WriteLine($"⚠️ Error cargando {archivo}: {ex.Message}");
+                            continue;
                         }
-                    }                    
+                    }
 
                     // PROCESAR LOS DATOS
                     if (datos != null && datos.Count > 0)
                     {
                         Console.WriteLine($"✅ Se cargaron {datos.Count} ejercicios desde {origenDatos}");
                         Console.WriteLine("📊 Iniciando migración de datos Json a DB");
-                        await _dataService.IniciarDatosExercises(datos);
+
+                        await _dataService.IniciarDatosExercises(datos, progress);
                         Preferences.Set("PrimerArranque", false);
+                        Preferences.Set("UsarDatosDemo", usarDatosDemo);
                         Debug.WriteLine("✅ Datos iniciales cargados correctamente");
                     }
                     else
@@ -124,49 +130,118 @@ namespace AnotadorGymApp.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"❌ Error al aplicar migración: {ex.Message}");                
+                Debug.WriteLine($"❌ Error al aplicar migración de ejercicios: {ex.Message}");
             }
         }
-        public async Task CargarRutinasInicialesAsync(DataService _dataService,ImagenPersistenteService imagenPersistenteService)
+        public async Task CargarRutinasInicialesAsync(DataService _dataService,ImagenPersistenteService imagenPersistenteService, IProgress<double>? progress = null)
         {            
+
+            bool rutinasCargadas = false;
+            bool usarDatosDemo = Preferences.Get("UsarDatosDemo", false);
+
             try
             {
-                if (!_dataService._database.Rutinas.Any())
+                if (_dataService._database.Rutinas.Any())
                 {
-                    #region JsonABaseDeDatos
+                    Debug.WriteLine("✅ Ya existen rutinas en la base de datos, omitiendo carga inicial");
+                    return;
+                }
 
-                    using var stream = await FileSystem.OpenAppPackageFileAsync("Rutinas.json");
-                    using var reader = new StreamReader(stream);
-                    string json = await reader.ReadToEndAsync().ConfigureAwait(false);
-                    Debug.WriteLine("📦 Contenido del archivo JSON:");
-                    Debug.WriteLine(json);
+                var archivos = usarDatosDemo ?
+                            new[] { "RutinasEJEMPLO.json", "Rutinas.json" } :
+                            new[] { "Rutinas.json", "RutinasEJEMPLO.json" };
 
-                    if (string.IsNullOrWhiteSpace(json))
+                Debug.WriteLine($"🔍 Modo actual: {(usarDatosDemo ? "DEMO" : "PRODUCCIÓN")}");
+                Debug.WriteLine($"🔍 Prioridad de archivos: {string.Join(" -> ", archivos)}");
+
+                List<Rutinas> rutinas = null;
+                string archivoCargado = null;                
+
+                foreach (var archivo in archivos)
+                {
+                    try
                     {
-                        Console.WriteLine("⚠️ El archivo está vacío");
+                        Debug.WriteLine($"📦 Intentando cargar: {archivo}");
+
+                        using var stream = await FileSystem.OpenAppPackageFileAsync(archivo);
+                        if (stream == null)
+                        {
+                            Debug.WriteLine($"⚠️ Archivo {archivo} no encontrado");
+                            continue;
+                        }
+
+                        using var reader = new StreamReader(stream);
+                        var json = await reader.ReadToEndAsync().ConfigureAwait(false);
+
+                        if (string.IsNullOrWhiteSpace(json))
+                        {
+                            Debug.WriteLine($"⚠️ Archivo {archivo} está vacío");
+                            continue;
+                        }
+
+                        rutinas = JsonSerializer.Deserialize<List<Rutinas>>(json);
+
+                        if (rutinas == null || rutinas.Count == 0)
+                        {
+                            Debug.WriteLine($"⚠️ Archivo {archivo} no contiene rutinas válidas");
+                            continue;
+                        }
+
+                        archivoCargado = archivo;
+                        usarDatosDemo = archivo.Contains("EJEMPLO");
+                        Debug.WriteLine($"✅ Se cargaron {rutinas.Count} rutinas desde {archivo}");
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"❌ Error al cargar {archivo}: {ex.Message}");
+                        continue;
+                    }
+                }                
+
+                try
+                {
+                    if (rutinas != null && rutinas.Count > 0)
+                    {
+
+                        await _dataService.IniciarDatosRutinas(rutinas,progress);
+                        Preferences.Set("PrimerArranque", false);
+                        Preferences.Set("UsarDatosDemo", usarDatosDemo);
+                        Preferences.Set("MostrarNotificacionDemoInicial", usarDatosDemo);
+                        Debug.WriteLine("✅ Datos iniciales cargados");
+
+                        rutinasCargadas = true;
+                        Debug.WriteLine($"✅ Se insertaron {rutinas.Count} rutinas en la base de datos");
+
+                        if (!Preferences.Get("ImagenesCargadas", false))
+                        {
+                            await CargarImagenesRutinasAsync(_dataService, imagenPersistenteService);
+                        }
+
+                        Debug.WriteLine($"🏁 Modo final: {(usarDatosDemo ? "DEMO" : "PRODUCCIÓN")}");
+                        Debug.WriteLine($"📊 Ejercicios: {Preferences.Get("OrigenDatosEjercicios", "Desconocido")}");
+                        Debug.WriteLine($"📊 Rutinas: {Preferences.Get("OrigenDatosRutinas", "Desconocido")}");                        
+
                     }
                     else
                     {
-                        var rutinas = JsonSerializer.Deserialize<List<Rutinas>>(json);
-                        Console.WriteLine($"✅ Se cargaron {rutinas?.Count ?? 0} rutinas, Iniciando Migrar Rutionas Json a DB");
-                        
-                        await _dataService.IniciarDatosRutinas(rutinas);                        
-                        Preferences.Set("PrimerArranque", false);
-                        Debug.WriteLine("✅ Datos iniciales cargados");
+                        Debug.WriteLine("❌ No hay rutinas válidas para insertar");                        
                     }
-
-                    #endregion
                 }
-                if (!Preferences.Get("ImagenesCargadas", false))
+                catch (Exception ex)
                 {
-                    await CargarImagenesRutinasAsync(_dataService, imagenPersistenteService);
+                    Debug.WriteLine($"❌ Error al insertar rutinas en BD: {ex.Message}");
                 }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error al aplicar migración: {ex.Message}");
+                Debug.WriteLine($"❌ Error crítico en CargarRutinasInicialesAsync: {ex.Message}");
             }
-        }
+            finally
+            {                
+                Debug.WriteLine($"🏁 Carga de rutinas completada. Éxito: {rutinasCargadas}");
+            }
+        }        
         private async Task CargarImagenesRutinasAsync(DataService _dataService, ImagenPersistenteService imagenPersistenteService)
         {
             try
@@ -211,7 +286,7 @@ namespace AnotadorGymApp.Services
                 {
                     var datos = JsonSerializer.Deserialize<List<WorkoutDay>>(json, new JsonSerializerOptions
                     {
-                        PropertyNameCaseInsensitive = true // ← Importante para que funcione el binding
+                        PropertyNameCaseInsensitive = true
                     });
 
                     Console.WriteLine($"✅ Se cargaron {datos?.Count ?? 0} WorkutDays");

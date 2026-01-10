@@ -1,19 +1,36 @@
 ﻿using AnotadorGymApp.Data;
 using AnotadorGymApp.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
+
 namespace AnotadorGymApp.MainPageViews;
 
-public partial class SplashPage : ContentPage
+public partial class SplashPage : ContentPage, INotifyPropertyChanged
 {
     private readonly DataService _dataService;
     private readonly ConfigService _configService;
     private readonly ImagenPersistenteService _imagenPersistenteService;
     private CancellationTokenSource cancellationToken;
+    private double _progreso;
+    public double Progreso
+    {
+        get => _progreso;
+        set
+        {
+            if (_progreso != value)
+            {
+                _progreso = value;
+                OnPropertyChanged();
+            }
+        }
+    }
 
     public SplashPage(DataService dataService,ConfigService configService,ImagenPersistenteService imagenPersistenteService)
 	{
@@ -21,7 +38,7 @@ public partial class SplashPage : ContentPage
 		this._dataService = dataService;
         this._configService = configService;
         this._imagenPersistenteService = imagenPersistenteService;
-        BindingContext = _dataService;
+        BindingContext = this;
     }        
     protected override async void OnAppearing()
     {
@@ -34,28 +51,29 @@ public partial class SplashPage : ContentPage
         _ = Task.Run(() => ActualizarMensajeProgreso(cancellationToken.Token));
         
         bool primerArranque = Preferences.Get("PrimerArranque", true);
-        bool imagenesCargadas = Preferences.Get("ImagenesCargadas", false);
-        var minTiempoSplash = Task.Delay(4000); // Tiempo mínimo de splash
+        bool imagenesCargadas = Preferences.Get("ImagenesCargadas", false);        
         
         try
         {
             await _dataService._database.Database.MigrateAsync(); // Esto va si o si Sea o no El primer Arranque
             if (primerArranque || !_dataService._database.Rutinas.Any() || !imagenesCargadas)
             {
-                await _configService.CargarExercisesInicialesAsync(_dataService);
-                await _configService.CargarRutinasInicialesAsync(_dataService, _imagenPersistenteService);                                
-                await minTiempoSplash;
+                var progress = new Progress<double>(value =>
+                {
+                    Progreso = value / 100.0;
+                });
+
+                await _configService.CargarExercisesInicialesAsync(_dataService, progress);
+                await _configService.CargarRutinasInicialesAsync(_dataService, _imagenPersistenteService, progress);                                
+                
             }
             else
             {
-                for (int i = 1; i <= 100; i++)
-                {
-                    _dataService.Progreso = i / 100.0;
-                    await Task.Delay(40);                    
-                }                
+                await AnimarProgresoSuaveAsync();
             }
+
 #if DEBUG
-        await _configService.CargarWorkoutDayPrueba(_dataService);
+            await _configService.CargarWorkoutDayPrueba(_dataService);
         await VerificarMigracionesAplicadas(_dataService._database);
         await VerificarRutinasAplicadas(_dataService._database);
         await VerificarWourKoutDays(_dataService._database);
@@ -107,7 +125,18 @@ public partial class SplashPage : ContentPage
             }
             catch (TaskCanceledException) { break; }
         }        
-    }    
+    }
+    private async Task AnimarProgresoSuaveAsync()
+    {
+        const int pasos = 30;
+        const int duracionMs = 1000;
+
+        for (int i = 0; i <= pasos; i++)
+        {
+            Progreso = (double)i / pasos;
+            await Task.Delay(duracionMs / pasos);
+        }
+    }
     private async Task VerificarRutinasAplicadas(DataBase database)
     {
         try
@@ -242,5 +271,12 @@ public partial class SplashPage : ContentPage
     {
         base.OnDisappearing();
         cancellationToken?.Cancel();
+    }
+
+    public new event PropertyChangedEventHandler? PropertyChanged;
+
+    protected override void OnPropertyChanged([CallerMemberName] string? name = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

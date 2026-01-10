@@ -2,6 +2,7 @@
 using AnotadorGymApp.Data;
 using AnotadorGymApp.MainPageViews;
 using AnotadorGymApp.Services;
+using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Maui.Views;
 using Microcharts;
 using Microcharts.Maui;
@@ -48,6 +49,30 @@ namespace AnotadorGymApp
                 var TaskResumenSemanal = CargarResumenSemanal();                
 
                 await Task.WhenAll(TaskRutina, TaskEntrenoHoy,TaskResumenSemanal);
+
+                bool esDemo = Preferences.Get("UsarDatosDemo", false);
+                bool notificacionDemo = Preferences.Get("MostrarNotificacionDemoInicial", false);
+
+                if (esDemo && notificacionDemo)
+                {
+
+                    bool respuesta = await Shell.Current.DisplayAlert(
+                        "🎯 Modo Demo",
+                        "Estás usando la versión de demostración con contenido limitado.\n\n" +
+                        "¿Deseas obtener la versión completa con todos los ejercicios y rutinas?",
+                        "Sí, quiero la versión completa",
+                        "Continuar en demo"
+                    );
+
+                    if (respuesta)
+                    {
+                        //EN DESARROLLO
+                        //await Launcher.OpenAsync("https://tudominio.com/descargar-app-completa");
+                    }
+                                        
+                    Preferences.Set("MostrarNotificacionDemoInicial", false);
+                }
+
             }
             catch (Exception ex)
             {

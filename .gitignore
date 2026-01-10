@@ -53,3 +53,4 @@ Backup/
 # Database files
 AnotadorGymApp/Resources/Raw/WorkoutDays.json
 AnotadorGymApp/Resources/Raw/Ejercicios.json
+AnotadorGymApp/Resources/Raw/Rutinas.json

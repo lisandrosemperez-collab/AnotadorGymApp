@@ -36,6 +36,7 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Microcharts.Maui" Version="1.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.8" />
@@ -57,7 +58,7 @@
 		<!--ForegroundFile="Resources\AppIcon\appiconfg.svg"-->
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#000000" Resize="true" BaseSize="1100,1100"></MauiSplashScreen>
+		<MauiImage Include="Resources\Splash\splash.svg" Color="#000000" Resize="true" BaseSize="1100,1100" />
 				
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -66,9 +67,7 @@
 		<MauiFont Include="Resources\Fonts\*" />
 		
 		<!-- Rutinas Images -->
-		<MauiAsset Include="Resources\Images\RutinasImages\*.jpg">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</MauiAsset>
+		<MauiAsset Include="Resources\Images\RutinasImages\*" />
 		
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />		
 	</ItemGroup>
