@@ -1,0 +1,639 @@
+[
+  {
+    "Nombre": "Rutina de Prueba - Bíceps Focalizado",
+    "Descripcion": "Rutina demo para testing - Enfoque en desarrollo de bíceps con variaciones",
+    "FrecuenciaPorGrupo": "3-4",
+    "Dificultad": "Principiante",
+    "TiempoPorSesion": "45-50 minutos",
+    "ImageSource": "ppl_3x4.jpg",
+    "Semanas": [
+      {
+        "Dias": [
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Barra Recta"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 1
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 65,
+                    "Tipo": 1
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Barra Z"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 1
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 65,
+                    "Tipo": 1
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Battle Ropes con Movimiento de Piernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:30",
+                    "Repeticiones": 30,
+                    "Porcentaje1RM": 50,
+                    "Tipo": 0
+                  },
+                  {
+                    "Descanso": "00:01:30",
+                    "Repeticiones": 30,
+                    "Porcentaje1RM": 50,
+                    "Tipo": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps Alternado con Mancuernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 65,
+                    "Tipo": 2
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 65,
+                    "Tipo": 2
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Mancuernas Sentado"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 1
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Barra Invertido (Supinación)"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 62,
+                    "Tipo": 3
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 62,
+                    "Tipo": 3
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Battle Ropes con Movimiento de Piernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:30",
+                    "Repeticiones": 40,
+                    "Porcentaje1RM": 55,
+                    "Tipo": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Mancuerna en Concentración"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 58,
+                    "Tipo": 1
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 1
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Mancuernas en Banco Inclinado"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 62,
+                    "Tipo": 2
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Nombre": "Rutina Demo - Variación de Equipos",
+    "Descripcion": "Demo para probar diferentes tipos de equipos (barra, mancuernas, polea)",
+    "FrecuenciaPorGrupo": "2-3",
+    "Dificultad": "Intermedio",
+    "TiempoPorSesion": "50-55 minutos",
+    "ImageSource": "protocolo_hypergrowth_4x4.jpg",
+    "Semanas": [
+      {
+        "Dias": [
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Barra en Banco Scott"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:30",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 65,
+                    "Tipo": 2
+                  },
+                  {
+                    "Descanso": "00:02:30",
+                    "Repeticiones": 8,
+                    "Porcentaje1RM": 68,
+                    "Tipo": 2
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Mancuernas en Banco Predicador"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps en Polea Alta con Barra Recta"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 15,
+                    "Porcentaje1RM": 55,
+                    "Tipo": 3
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 58,
+                    "Tipo": 3
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Battle Ropes con Movimiento de Piernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:00",
+                    "Repeticiones": 45,
+                    "Porcentaje1RM": 50,
+                    "Tipo": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Barra 21's"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:03:00",
+                    "Repeticiones": 21,
+                    "Porcentaje1RM": 50,
+                    "Tipo": 5
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Mancuernas de Pie"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 65,
+                    "Tipo": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Mancuerna a Una Mano"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:30",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 1
+                  },
+                  {
+                    "Descanso": "00:01:30",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 62,
+                    "Tipo": 1
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Battle Ropes con Movimiento de Piernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:30",
+                    "Repeticiones": 35,
+                    "Porcentaje1RM": 52,
+                    "Tipo": 0
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Nombre": "Rutina Test - Full Body Demo",
+    "Descripcion": "Rutina de demostración con ejercicios de bíceps y full body combinados",
+    "FrecuenciaPorGrupo": "1-2",
+    "Dificultad": "Principiante",
+    "TiempoPorSesion": "40-45 minutos",
+    "ImageSource": "bro_split_evolution_5x4.jpg",
+    "Semanas": [
+      {
+        "Dias": [
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Battle Ropes con Movimiento de Piernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:00",
+                    "Repeticiones": 30,
+                    "Porcentaje1RM": 55,
+                    "Tipo": 0
+                  },
+                  {
+                    "Descanso": "00:01:00",
+                    "Repeticiones": 30,
+                    "Porcentaje1RM": 55,
+                    "Tipo": 0
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps Simultáneo con Mancuernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 58,
+                    "Tipo": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Barra en Banco Predicador"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:30",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 65,
+                    "Tipo": 2
+                  },
+                  {
+                    "Descanso": "00:02:30",
+                    "Repeticiones": 8,
+                    "Porcentaje1RM": 68,
+                    "Tipo": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Battle Ropes con Movimiento de Piernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:30",
+                    "Repeticiones": 40,
+                    "Porcentaje1RM": 50,
+                    "Tipo": 0
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                    "Name": "Curl de Bíceps con Mancuernas en Ángulo 90°"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 62,
+                    "Tipo": 1
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps en Polea Alta con Barra Z"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 3
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 62,
+                    "Tipo": 3
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Mancuernas en Banco Inclinado Prono"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 58,
+                    "Tipo": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Nombre": "Demo - Técnicas Avanzadas",
+    "Descripcion": "Rutina de prueba para demostrar diferentes técnicas de entrenamiento",
+    "FrecuenciaPorGrupo": "2-3",
+    "Dificultad": "Intermedio",
+    "TiempoPorSesion": "55-60 minutos",
+    "ImageSource": "upper_lower_fuerza_4x4.jpg",
+    "Semanas": [
+      {
+        "Dias": [
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Barra 21's"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:03:00",
+                    "Repeticiones": 7,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 5
+                  },
+                  {
+                    "Descanso": "00:03:00",
+                    "Repeticiones": 7,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 5
+                  },
+                  {
+                    "Descanso": "00:03:00",
+                    "Repeticiones": 7,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 5
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Battle Ropes con Movimiento de Piernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:00",
+                    "Repeticiones": 30,
+                    "Porcentaje1RM": 55,
+                    "Tipo": 0
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Mancuerna en Banco Scott"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 65,
+                    "Tipo": 2
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 8,
+                    "Porcentaje1RM": 68,
+                    "Tipo": 2
+                  },
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 6,
+                    "Porcentaje1RM": 70,
+                    "Tipo": 2
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps Alternado con Mancuernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:30",
+                    "Repeticiones": 12,
+                    "Porcentaje1RM": 58,
+                    "Tipo": 1
+                  },
+                  {
+                    "Descanso": "00:01:30",
+                    "Repeticiones": 10,
+                    "Porcentaje1RM": 60,
+                    "Tipo": 1
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps en Polea Alta con Barra Recta"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:00",
+                    "Repeticiones": 15,
+                    "Porcentaje1RM": 55,
+                    "Tipo": 3
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "Ejercicios": [
+              {
+                "Exercise": {
+                  "Name": "Battle Ropes con Movimiento de Piernas"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:01:00",
+                    "Repeticiones": 45,
+                    "Porcentaje1RM": 50,
+                    "Tipo": 0
+                  },
+                  {
+                    "Descanso": "00:01:00",
+                    "Repeticiones": 45,
+                    "Porcentaje1RM": 50,
+                    "Tipo": 0
+                  }
+                ]
+              },
+              {
+                "Exercise": {
+                  "Name": "Curl de Bíceps con Barra Recta"
+                },
+                "Series": [
+                  {
+                    "Descanso": "00:02:30",
+                    "Repeticiones": 8,
+                    "Porcentaje1RM": 68,
+                    "Tipo": 5
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

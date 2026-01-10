@@ -10,7 +10,7 @@
     <Color x:Key="BackgroundColor">#2D4038</Color>
     <Color x:Key="CardBackground">#3A544B</Color>
     <Color x:Key="SurfaceColor">#486A5F</Color>
-    <Color x:Key="SurfaceColorTransparent">#80759D94</Color>
+    <Color x:Key="SurfaceColorTransparent">#95759D94</Color>
 
     <!-- TEXTO -->
     <Color x:Key="PrimaryTextColor">#E8F5F0</Color>

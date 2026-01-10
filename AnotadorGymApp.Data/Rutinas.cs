@@ -33,7 +33,7 @@ namespace AnotadorGymApp.Data
         public bool Completado { get; set; } = false;
         public ICollection<RutinaSemana> Semanas { get; set; } = new List<RutinaSemana>();
         [NotMapped]
-        private ObservableCollection<RutinaSemana> _semanasObservable;
+        private ObservableCollection<RutinaSemana> _semanasObservable = new ObservableCollection<RutinaSemana>();
         [NotMapped]
         public ObservableCollection<RutinaSemana> SemanasObservable
         {
@@ -101,7 +101,7 @@ namespace AnotadorGymApp.Data
         public ICollection<RutinaDia> Dias { get; set; } = new List<RutinaDia>();
         public bool Completado { get; set; } = false;
         [NotMapped]
-        private ObservableCollection<RutinaDia> _diasObservable;
+        private ObservableCollection<RutinaDia> _diasObservable = new ObservableCollection<RutinaDia>();
         [NotMapped]
         public ObservableCollection<RutinaDia> DiasObservable
         {
@@ -196,7 +196,7 @@ namespace AnotadorGymApp.Data
         public RutinaDia Dia { get; set; }        
         public ICollection<RutinaSeries> Series { get; set; } = new List<RutinaSeries>();
         [NotMapped]
-        private ObservableCollection<RutinaSeries> seriesObservable;
+        private ObservableCollection<RutinaSeries> seriesObservable = new ObservableCollection<RutinaSeries>();
         [NotMapped]
         public ObservableCollection<RutinaSeries> SeriesObservable
         {

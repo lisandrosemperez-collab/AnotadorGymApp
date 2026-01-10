@@ -79,7 +79,7 @@ namespace AnotadorGymApp.Services
                 nombreArchivoEmbebido = Path.GetFileName(nombreArchivoEmbebido);
                 nombreArchivoEmbebido = NormalizarNombre(nombreArchivoEmbebido);
 
-                var rutaRaw = Path.Combine("Resources", "Images", "RutinasImages", nombreArchivoEmbebido);
+                var rutaEmbebida = $"RutinasImages/{nombreArchivoEmbebido}";
 
                 var rutaDestino = Path.Combine(_carpetaImagenesUsuario, nombreArchivoEmbebido);
                 if (File.Exists(rutaDestino))
@@ -88,44 +88,43 @@ namespace AnotadorGymApp.Services
                     return rutaDestino;
                 }
 
-                var ubicaciones = new[]
+                string[] rutasPosibles =
                 {
-                    nombreArchivoEmbebido,
-                    Path.Combine("Resources", "Images", "RutinasImages", nombreArchivoEmbebido),
-                    Path.Combine("Resources", "Images", nombreArchivoEmbebido),
-                    Path.Combine("Images", "RutinasImages", nombreArchivoEmbebido),
-                    Path.Combine("Images", nombreArchivoEmbebido),
-                    Path.Combine("RutinasImages", nombreArchivoEmbebido)
+                    nombreArchivoEmbebido,                           
+                    $"RutinasImages/{nombreArchivoEmbebido}",        
+                    $"Images/RutinasImages/{nombreArchivoEmbebido}", 
+                    $"Resources/Images/RutinasImages/{nombreArchivoEmbebido}"
                 };
 
+                Stream stream = null;
+                string rutaEncontrada = null;
 
-                using var stream = await FileSystem.OpenAppPackageFileAsync(rutaRaw);
-                using var fileStream = new FileStream(rutaDestino, FileMode.Create, FileAccess.Write);
-                await stream.CopyToAsync(fileStream);
+                foreach (var ruta in rutasPosibles)
+                {
+                    try
+                    {
+                        stream = await FileSystem.OpenAppPackageFileAsync(ruta);
+                        if (stream != null)
+                        {
+                            rutaEncontrada = ruta;
+                            Debug.WriteLine($"✅ Imagen encontrada en: {ruta}");
+                            break;
+                        }
+                    }
+                    catch (FileNotFoundException)
+                    {                        
+                        continue;
+                    }
+                }
 
-                Debug.WriteLine($"✅ Copiada: {nombreArchivoEmbebido} desde {rutaDestino}");
+                using (stream)
+                using (var fileStream = new FileStream(rutaDestino, FileMode.Create, FileAccess.Write))
+                {
+                    await stream.CopyToAsync(fileStream);
+                }
+
+                Debug.WriteLine($"✅ Copiada: {nombreArchivoEmbebido} desde {rutaEncontrada ?? "ensamblado"}");
                 return rutaDestino;
-
-                //foreach (var rutaEmbebida in ubicaciones)
-                //{
-                //    try
-                //    {
-                //        using var stream = await FileSystem.OpenAppPackageFileAsync(rutaEmbebida);
-                //        using var fileStream = new FileStream(rutaDestino, FileMode.Create, FileAccess.Write);
-                //        await stream.CopyToAsync(fileStream);
-
-                //        Debug.WriteLine($"✅ Copiada: {nombreArchivoEmbebido} desde {rutaEmbebida}");
-                //        return rutaDestino;
-                //    }
-                //    catch (FileNotFoundException)
-                //    {
-                //        // Continuar con siguiente ubicación
-                //        continue;
-                //    }
-                //}
-                // ❌ Si no se encuentra en ninguna ubicación
-                //Debug.WriteLine($"⚠️ No se encontró: {nombreArchivoEmbebido} en recursos embebidos");
-                return null;            
 
             }
             catch (Exception ex)

@@ -67,10 +67,10 @@
 
                         <local:SeleccionPlantilla.SinImagenTemplate>
                             <DataTemplate>
-                                <Grid Margin="10" RowDefinitions="Auto">
+                                <Grid Margin="10" RowDefinitions="Auto" BackgroundColor="{DynamicResource GreenPrimary}">
                                     <Border Style="{DynamicResource BorderWithShadowStyle}" Stroke="{DynamicResource GreenDarker}">
                                         <Grid Margin="0" RowSpacing="8" Padding="10"
-                                            RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto" BackgroundColor="{DynamicResource GreenDarker}">
+                                            RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto" BackgroundColor="{DynamicResource GreenPrimary}">
 
                                             <!-- NOMBRE RUTINA -->
                                             <Label Text="{Binding Nombre}" Style="{DynamicResource Headline}"

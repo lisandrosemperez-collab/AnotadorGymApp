@@ -28,25 +28,8 @@ namespace AnotadorGymApp.Data
             _database.Database.Migrate();
         }        
 
-        #region SplashScreen
-
-        private double _progreso = 0;
-        public double Progreso
-        {
-            get => _progreso;
-            set
-            {
-                if (_progreso != value)
-                {
-                    _progreso = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        #endregion
-
         #region ConfigPage        
-        public async Task IniciarDatosExercises(List<ExerciseJson> exercises)
+        public async Task IniciarDatosExercises(List<ExerciseJson> exercises, IProgress<double>? progress = null)
         {
             try
             {
@@ -155,15 +138,13 @@ namespace AnotadorGymApp.Data
                         Debug.WriteLine($"❌ ERROR en '{ex.Name}': {innerEx.Message}");
                     }
                 }
-
-                #region Guardado en Base De Datos
+                
                 List<object> todasLasEntidades = new List<object>();                                
 
                 int totalElementos = nuevosExercises.Count;
                 int elementosGuardados = 0;
 
-                Debug.WriteLine($"🚀 Guardando {totalElementos} elementos en batches...");
-                Progreso = 0;
+                Debug.WriteLine($"🚀 Guardando {totalElementos} elementos en batches...");                
 
                 // Optimizar SQLite temporalmente
                 await OptimizarSqliteParaInsercionMasiva();
@@ -266,37 +247,37 @@ namespace AnotadorGymApp.Data
                                 }
                             }
                         }
-
-                        // Guardar ejercicios en batches
-                        const int TAMANO_BATCH = 100;
-                        int ejerciciosGuardados = 0;
-
-                        for (int i = 0; i < nuevosExercises.Count; i += TAMANO_BATCH)
-                        {
-                            var batch = nuevosExercises.Skip(i).Take(TAMANO_BATCH).ToList();
-                            await _database.Exercises.AddRangeAsync(batch);
-                            await _database.SaveChangesAsync(); // Guardar este batch
-
-                            ejerciciosGuardados += batch.Count;
-                            Progreso = (double)ejerciciosGuardados / (nuevosExercises.Count * 2);
-                            Debug.WriteLine($"📊 Progreso: {ejerciciosGuardados}/{nuevosExercises.Count}");
-                        }
-
-                        Debug.WriteLine($"✅ Ejercicios guardados: {nuevosExercises.Count}");
                     }
+
+                    // Guardar ejercicios en batches
+                    const int TAMANO_BATCH = 100;
+                    int guardados = 0;
+                    int total = nuevosExercises.Count;                    
+
+                    for (int i = 0; i < total; i += TAMANO_BATCH)
+                    {
+                        var batch = nuevosExercises.Skip(i).Take(TAMANO_BATCH).ToList();
+                        await _database.Exercises.AddRangeAsync(batch);
+                        await _database.SaveChangesAsync(); // Guardar este batch
+
+                        guardados += batch.Count;                        
+                        double nuevoProgreso = (double)guardados / total * 80;
+                        progress?.Report(nuevoProgreso);
+
+                        Debug.WriteLine($"🔍 DESPUÉS: Progreso = {nuevoProgreso}");
+                        await Task.Delay(100);                        
+                    }
+
+                    Debug.WriteLine($"✅ Ejercicios guardados: {nuevosExercises.Count}");                    
+
                     await transaction.CommitAsync();
                     await RestaurarConfiguracionSqliteNormal();
                     Debug.WriteLine($"✅ Guardado completado: {nuevosExercises.Count} ejercicios nuevos");
-
-                    #endregion
-
-                    Progreso = 50;                    
+                    
                 }
                 catch (Exception ex)
                 {
-                    await transaction.RollbackAsync();
-                    await transaction.CommitAsync();
-                    await RestaurarConfiguracionSqliteNormal();
+                    await transaction.RollbackAsync();                                        
                     Debug.WriteLine($"❌ ERROR durante el guardado: {ex.Message}");
                     Debug.WriteLine($"Detalles: {ex.InnerException?.Message}");
                     throw;
@@ -304,13 +285,17 @@ namespace AnotadorGymApp.Data
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"❌ ERROR CRÍTICO: {ex.Message}");
-                RestaurarConfiguracionSqliteNormal();
-                Progreso = 0; // Resetear en error crítico
+                Debug.WriteLine($"❌ ERROR CRÍTICO: {ex.Message}");                
+                progress.Report(0); // Resetear en error crítico
                 throw;                
+            }
+            finally
+            {
+                await RestaurarConfiguracionSqliteNormal();
             }
 
         }               
+
         private async Task OptimizarSqliteParaInsercionMasiva()
         {           
             try
@@ -351,7 +336,7 @@ namespace AnotadorGymApp.Data
                 Debug.WriteLine($"⚠️ Error al restaurar configuración: {ex.Message}");
             }
         }
-        public async Task IniciarDatosRutinas(List<Rutinas> rutinas)
+        public async Task IniciarDatosRutinas(List<Rutinas> rutinas, IProgress<double>? progress = null)
         {
             if (rutinas == null || !rutinas.Any())
             {
@@ -491,8 +476,6 @@ namespace AnotadorGymApp.Data
                                     Debug.WriteLine($"✅ Día conservado: {dia.Ejercicios.Count} ejercicios válidos");
                                 }
                                 #endregion
-
-
                             }
 
                             #region VERIFICAR SI LA SEMANA QUEDÓ VACÍA
@@ -515,11 +498,16 @@ namespace AnotadorGymApp.Data
                     }
 
                     #region GUARDAR EN BD                    
-                    Progreso = 50;
+                    progress.Report(80);
                     if (rutinasNuevas.Any())
                     {
                         rutinasGuardadas = 0;
-                        int totalRutinas = rutinasNuevas.Count;                                                
+                        int totalRutinas = rutinasNuevas.Count;
+                        const int PROGRESO_INICIAL = 80;
+                        const int PROGRESO_FINAL = 100;
+                        const int RANGO_PROGRESO = PROGRESO_FINAL - PROGRESO_INICIAL; // 20
+
+                        double incremento = (double)(PROGRESO_FINAL - PROGRESO_INICIAL) / totalRutinas;
 
                         foreach (var rutina in rutinasNuevas)
                         {
@@ -530,23 +518,24 @@ namespace AnotadorGymApp.Data
 
                                 rutinasGuardadas++;
 
-                                // Actualizar progreso (ejemplo: si quieres que llegue al 50%)                                
-                                Progreso = 0.5 + (rutinasGuardadas / (double)totalRutinas * 0.5);
-
-                                // O si quieres progreso lineal del 0% al 50%:
-                                // Progreso = (double)rutinasGuardadas / totalRutinas * 0.5;
-
+                                double progreso = PROGRESO_INICIAL + rutinasGuardadas * incremento;
+                                progress?.Report(Math.Min(progreso, PROGRESO_FINAL));                                
+                                
+                                                                    
                                 Debug.WriteLine($"✅ Rutina guardada: {rutinasGuardadas}/{totalRutinas} - {rutina.Nombre}");
-                                Debug.WriteLine($"   📊 Progreso actual: {Progreso:P0}");
+                                Debug.WriteLine($"   📊 Progreso actual: {progreso:F1}%");
+
                             }
                             catch (Exception ex)
                             {
-                                Debug.WriteLine($"❌ Error al guardar rutina '{rutina.Nombre}': {ex.Message}");
-                                // Opcional: puedes continuar con las siguientes rutinas
+                                Debug.WriteLine($"❌ Error al guardar rutina '{rutina.Nombre}': {ex.Message}");                                                             
                                 continue;
                             }
                         }
-                        
+
+                        progress.Report(PROGRESO_FINAL);
+                        Debug.WriteLine($"🎯 Progreso final: 100% (todas las rutinas guardadas)");
+
                         Debug.WriteLine($"✅ Guardadas {rutinasGuardadas}/{totalRutinas} rutinas nuevas");
 
                         // Mostrar ejercicios no encontrados (fuera del bucle)
@@ -578,11 +567,13 @@ namespace AnotadorGymApp.Data
                 }
                 catch (Exception ex)
                 {
-                    await transaction.RollbackAsync();
-                    await transaction.CommitAsync();
-                    await RestaurarConfiguracionSqliteNormal();
+                    await transaction.RollbackAsync();                                        
                     Debug.WriteLine($"❌ Error en transacción: {ex.Message}");
                     throw;
+                }
+                finally
+                {
+                    await RestaurarConfiguracionSqliteNormal();
                 }
 
             }                                   
@@ -615,7 +606,6 @@ namespace AnotadorGymApp.Data
                 Debug.WriteLine($"  {rutina.Nombre}: {semanasDeRutina} semanas, {ejerciciosDeRutina} ejercicios");
             }
         }
-
         public async Task EliminarTodosLosEntrenamientos()
         {
             try
@@ -827,8 +817,8 @@ namespace AnotadorGymApp.Data
         public async Task IniciarWorkutDaysPrueba(List<WorkoutDay> workoutDaysTemp)
         {
             var exercise = _database.Exercises.FirstOrDefault(e => e.Name == "Curl de Bíceps con Barra Recta");
-            var exercise1 = _database.Exercises.FirstOrDefault(e => e.Name == "Pájaros en Polea Cruzada");
-            var exercise2 = _database.Exercises.FirstOrDefault(e => e.Name == "Russian Twist en Banco Declinado");
+            var exercise1 = _database.Exercises.FirstOrDefault(e => e.Name == "Curl de Bíceps con Barra en Banco Scott");
+            var exercise2 = _database.Exercises.FirstOrDefault(e => e.Name == "Curl de Bíceps con Mancuerna en Concentración");
             var mitad = workoutDaysTemp.Count / 3;
 
             List<WorkoutDay> primeraMitad = workoutDaysTemp.Take(mitad).ToList();
@@ -1040,6 +1030,45 @@ namespace AnotadorGymApp.Data
         #endregion
 
         #region Rutinas
+        public async Task<Rutinas> AgregarRutina(string nombre, int semanas)
+        {
+            if (string.IsNullOrWhiteSpace(nombre)) { nombre = "Nueva Rutina"; }
+            semanas = semanas <= 0 ? 1 : semanas;
+
+            using var transaction = await _database.Database.BeginTransactionAsync();
+
+            try
+            {
+                var nuevaRutina = new Rutinas
+                {
+                    Nombre = nombre,
+                    ImageSource = "rutina_default.jpg",
+                    Activa = false,
+                    Semanas = new List<RutinaSemana>()
+                };
+
+                for (int i = 0; i < semanas; i++)
+                {
+                    var nuevaSemana = new RutinaSemana();
+                    nuevaRutina.Semanas.Add(nuevaSemana);
+                    nuevaRutina.SemanasObservable.Add(nuevaSemana);
+                }
+
+                await _database.Rutinas.AddAsync(nuevaRutina);
+                await _database.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return nuevaRutina;
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                Debug.WriteLine($"❌ Error al agregar rutina: {ex.Message}");
+
+                throw new ApplicationException("No se pudo crear la rutina", ex);
+
+            }
+        }
         public async Task<bool> AgregarSemanasARutinaAsync(Rutinas rutina,int semanasAAgregar)
         {
             if (rutina == null || semanasAAgregar <= 0)

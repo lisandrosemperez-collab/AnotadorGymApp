@@ -23,7 +23,7 @@ public partial class AgregarRutinaPage : ContentPage, INotifyPropertyChanged
     protected void OnPropertyChanged(string nombre)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombre));
     public event PropertyChangedEventHandler PropertyChanged;
-    private int _semanaIndexSeleccionado = 1;
+    private int _semanaIndexSeleccionado = 0;
     public int SemanaIndexSeleccionado
     {
         get
@@ -382,27 +382,7 @@ public partial class AgregarRutinaPage : ContentPage, INotifyPropertyChanged
         {
             IsBusy = false;
         }
-    }    
-    private void BorrarObservableCollections(Rutinas rutina)
-    {
-        if(RutinaActual == null) { return; }        
-        rutina.SemanasObservable?.Clear();
-
-        foreach (var semana in rutina.Semanas)
-        {
-            semana.DiasObservable?.Clear();
-            foreach (var dia in semana.Dias)
-            {
-                dia.EjerciciosObservable?.Clear();
-
-                foreach (var ejercicio in dia.Ejercicios)
-                {
-                    ejercicio.SeriesObservable?.Clear();
-                }
-            }
-        }
-        RutinaActual = null;
-    }
+    }        
     protected override async void OnAppearing()
     {
         base.OnAppearing();
@@ -423,34 +403,32 @@ public partial class AgregarRutinaPage : ContentPage, INotifyPropertyChanged
         {
             if (RutinaId != 0)
             {
-                // MODO EDICIÓN
-                var rutina = await dataService.ObtenerRutinaActualyUI(RutinaId);            
+                // EDICIÓN RUTINA EXISTENTE
+                var rutina = await dataService.ObtenerRutinaActualyUI(RutinaId);
                 if (rutina != null)
-                {                                
+                {
                     RutinaActual = rutina;
                 }
                 else
                 {
                     await DisplayAlert("Error", "No se encontró la rutina", "OK");
-                    await Shell.Current.GoToAsync(".."); // vuelve para atrás
+                    await Shell.Current.GoToAsync("..");
+                    return;
                 }
             }
             else
             {
-                // MODO NUEVA RUTINA
-                RutinaActual = new Rutinas
-                {
-                    Nombre = "Nueva Rutina",
-                    ImageSource = "rutina_default.jpg",
-                    Activa = false,                
-                };
-
-                await dataService._database.Rutinas.AddAsync(RutinaActual);                
-
-                await dataService._database.SaveChangesAsync();                
+                // RUTINA NUEVA
+                RutinaActual = await dataService.AgregarRutina(string.Empty, 1);
                 RutinaId = RutinaActual.RutinaId;
             }
-        }catch (Exception ex) {Debug.WriteLine($"{ex}"); }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error: {ex}");
+            await DisplayAlert("Error", "No se pudo crear/editar la rutina", "OK");
+            await Shell.Current.GoToAsync("..");
+        }
 
         #endregion
 
@@ -491,8 +469,7 @@ public partial class AgregarRutinaPage : ContentPage, INotifyPropertyChanged
                 .SelectMany(s => s.Dias ?? Enumerable.Empty<RutinaDia>()).Any() == true;
 
             if (!tieneEjercicios)
-            {
-                // Opción A: Eliminar
+            {                
                 dataService._database.Rutinas.Remove(RutinaActual);
                 await dataService._database.SaveChangesAsync();
                 BorrarUi();
@@ -502,22 +479,16 @@ public partial class AgregarRutinaPage : ContentPage, INotifyPropertyChanged
         {
             Debug.WriteLine($"Error en OnDisappearing: {ex.Message}");
         }
-
         BorrarUi();
     }    
     public void BorrarUi()
     {
         dataService.ClearIntIdAgregarRutinaPopUp();
-        dataService._database.ChangeTracker.Clear();
-        BorrarObservableCollections(rutinaActual);
+        dataService._database.ChangeTracker.Clear();        
         RutinaActual = new Rutinas();
-        RutinaId = 0;
-        NombreRutinaEntry.Text = string.Empty;
-        SemanaPicker.SelectedIndex = -1;
-        SemanaPicker.SelectedItem = null;
+        RutinaId = 0;        
     }
 }
-
 public class IntToTimeSpanConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
